@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Control de Calidad - BlaaFlow</title>
+  <link rel="stylesheet" href="../assets/css/layout.css">
+  <link rel="stylesheet" href="../assets/css/calidad/calidad.css">
+</head>
+<body>
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <img src="../assets/img/logo-sin-fondo.png" alt="Logo BlaaFlow">
+    <div class="search-profile">
+      <input type="text" placeholder="Buscar...">
+      <div class="profile">A</div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <ul>
+      <li><a href="../dashboard.html">Dashboard Admin</a></li>
+
+      <div class="section-title"><b>Fases Especializadas ▿</b></div>
+      <li><a href="../empaste/empaste.html">Encuadernación / Empaste</a></li>
+      <li><a href="../catalogacion/catalogacion.html">Catalogaciones</a></li>
+      <li><a href="../entrega/entrega.html">Entrega Final</a></li>
+      <li><a href="../digitalizacion/digitalizacion.html">Digitalización</a></li>
+      <li><a href="../calidad/calidad.html" class="active">Control de Calidad</a></li>
+      <li><a href="../terminado/terminado.html">Terminado Final</a></li>
+      <li><a href="../alistamiento/alistamiento.html">Alistamiento</a></li>
+
+      <div class="section-title"><b>Seguimiento ▿</b></div>
+      <li><a href="../control-procesos/procesos.html">Control de Procesos</a></li>
+
+      <div class="section-title"><b>Configuración ▿</b></div>
+      <li><a href="../configuracion/permisos.html">Permisos</a></li>
+      <li><a href="../configuracion/fases.html">Fases del Proceso</a></li>
+      <li><a href="../configuracion/roles.html">Roles y Permisos</a></li>
+      <li><a href="../configuracion/usuarios.html">Usuarios</a></li>
+
+      <div class="section-title"><b>Gestión ▿</b></div>
+      <li><a href="../gestion/proveedores.html">Proveedores</a></li>
+    </ul>
+  </div>
+
+  <!-- CONTENIDO -->
+  <div class="content">
+    <div class="header">
+      <h2>📑 Procesos en Control de Calidad</h2>
+    </div>
+
+    <!-- Ejemplo de Orden -->
+    <div class="order-block">
+      <button class="order-header" onclick="toggleOrder('order-cc01')">
+        Número de Orden: CC-2025-01 <span class="arrow">▼</span>
+      </button>
+      <div id="order-cc01" class="order-content hidden">
+        <table class="process-table">
+          <thead>
+            <tr>
+              <th>Título</th>
+              <th>ISBN</th>
+              <th>Cantidad</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Literatura Universal</td>
+              <td>9789589876543</td>
+              <td>2</td>
+              <td><span class="badge yellow">Pendiente</span></td>
+            </tr>
+            <tr>
+              <td>Historia de Colombia</td>
+              <td>9789581234567</td>
+              <td>1</td>
+              <td><span class="badge green">Finalizado</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Otro ejemplo de orden -->
+    <div class="order-block">
+      <button class="order-header" onclick="toggleOrder('order-cc02')">
+        Número de Orden: CC-2025-02 <span class="arrow">▼</span>
+      </button>
+      <div id="order-cc02" class="order-content hidden">
+        <table class="process-table">
+          <thead>
+            <tr>
+              <th>Título</th>
+              <th>ISBN</th>
+              <th>Cantidad</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Enciclopedia Universal</td>
+              <td>9789587654321</td>
+              <td>4</td>
+              <td><span class="badge red">En Proceso</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        
+      </div>
+    </div>
+  </div>
+  <script src="../assets/js/calidad/calidad.js"></script>
+</body>
+</html>

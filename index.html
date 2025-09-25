@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro - BlaaFlow</title>
+    <link rel="stylesheet" href="assets/css/index.css">
+
+</head>
+<body>
+
+  <div class="book" id="book">
+    <!-- Portada -->
+    <div class="cover">
+      <img src="./assets/img/blaa-portada.png" alt="Portada BlaaFlow">
+    </div>
+
+    <!-- Página -->
+    <div class="page" id="formPage">
+      <!-- Login -->
+      <div id="loginForm">
+        <h2>📖 Iniciar Sesión</h2>
+        <div class="form-group">
+          <input type="email" placeholder="Correo">
+        </div>
+        <div class="form-group">
+          <input type="password" placeholder="Contraseña">
+        </div>
+        <button onclick="window.location.href='dashboard.html'" type="button">Ingresar</button>
+        <div class="switch">
+          ¿No tienes cuenta? <a onclick="switchForm('register')">Crear cuenta</a>
+        </div>
+      </div>
+
+      <!-- Registro -->
+      <div id="registerForm" style="display:none;">
+        <h2>✒️ Crear Cuenta</h2>
+        <div class="form-group">
+          <input type="text" placeholder="Nombre del rol">
+        </div>
+        <div class="form-group">
+          <input type="email" placeholder="Correo">
+        </div>
+        <div class="form-group">
+          <input type="password" placeholder="Contraseña">
+        </div>
+        <div class="form-group">
+          <input type="password" placeholder="Confirmar contraseña">
+        </div>
+        <button>Registrarse</button>
+        <div class="switch">
+          ¿Ya tienes cuenta? <a onclick="switchForm('login')">Inicia sesión</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="assets/js/index.js"></script>
+
+  
+
+</body>
+</html>

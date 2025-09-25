@@ -1,0 +1,116 @@
+
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: url('./assets/img/libreria.jpg') no-repeat center/cover;
+      font-family: 'Georgia', serif;
+    }
+
+    .book {
+      width: 600px;
+      height: 420px;
+      perspective: 2000px;
+      position: relative;
+    }
+
+    /* === TAPA === */
+    .cover {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #990f0c;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transform-origin: left center;
+      transition: transform 2s cubic-bezier(0.77, 0, 0.175, 1);
+      z-index: 2;
+      border-radius: 6px;
+      box-shadow: inset -10px 0 25px rgba(0,0,0,0.4),
+                  5px 0 15px rgba(0,0,0,0.4);
+      overflow: hidden;
+    }
+
+    .cover img {
+      max-width: 80%;
+      max-height: 80%;
+      object-fit: contain;
+    }
+
+    .book.open .cover {
+      transform: rotateY(-140deg) skewY(6deg);
+      box-shadow: inset -25px 0 45px rgba(0,0,0,0.6),
+                  -15px 0 25px rgba(0,0,0,0.6);
+    }
+
+    /* === PÁGINAS === */
+    .page {
+      width: 100%;
+      height: 100%;
+      background: #fffdf8;
+      padding: 2rem;
+      box-sizing: border-box;
+      transform: rotateY(0deg);
+      box-shadow: inset 8px 0 20px rgba(0,0,0,0.1);
+      border-radius: 6px;
+      z-index: 1;
+      position: relative;
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #990f0c;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.6rem;
+      border: none;
+      border-bottom: 2px solid #990f0c;
+      font-size: 1rem;
+      background: transparent;
+    }
+
+    button {
+      margin-top: 1rem;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      background: linear-gradient(135deg, #990f0c, #7f0c0a);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.3s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      background: linear-gradient(135deg, #7f0c0a, #111);
+    }
+
+    .switch {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .switch a {
+      color: #990f0c;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .switch a:hover {
+      text-decoration: underline;
+    }
+  

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Editar Proceso - BlaaFlow</title>
+  <link rel="stylesheet" href="../assets/css/layout.css">
+  <link rel="stylesheet" href="../assets/css/control-procesos/editar-proceso.css">
+</head>
+<body>
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <img src="../assets/img/logo-sin-fondo.png" alt="Logo Gadier">
+    <div class="search-profile">
+      <input type="text" placeholder="Buscar...">
+      <div class="profile">A</div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <ul>
+      <li class="active">
+        <a href="dashboard.html" style="color: inherit; text-decoration: none;">Dashboard Admin</a>
+      </li>
+
+      <div class="section-title"><b>Fases Especializadas ▿</b></div>
+      <li><a href="../empaste/empaste.html" style="color: inherit; text-decoration: none;">Encuadernación / Empaste</a></li>
+      <li><a href="../catalogacion/catalogacion.html" style="color: inherit; text-decoration: none;">Catalogaciones</a></li>
+      <li><a href="../entrega/entrega.html" style="color: inherit; text-decoration: none;">Entrega Final</a></li>
+      <li><a href="../digitalizacion/digitalizacion.html" style="color: inherit; text-decoration: none;">Digitalización</a></li>
+      <li><a href="../calidad/calidad.html" style="color: inherit; text-decoration: none;">Control de Calidad</a></li>
+      <li><a href="../terminado/terminado.html" style="color: inherit; text-decoration: none;">Terminado Final</a></li>
+      <li><a href="../alistamiento/alistamiento.html" style="color: inherit; text-decoration: none;">Alistamiento</a></li>
+
+      <div class="section-title"><b>Seguimiento ▿</b></div>
+      <li><a href="historial.html" style="color: inherit; text-decoration: none;">Historial de Procesos</a></li>
+      <li><a href="../control-procesos/procesos.html" style="color: inherit; text-decoration: none;">Control de Procesos</a></li>
+
+      <div class="section-title"><b>Configuración ▿</b></div>
+      <li><a href="permisos.html" style="color: inherit; text-decoration: none;">Permisos</a></li>
+      <li><a href="fases.html" style="color: inherit; text-decoration: none;">Fases del Proceso</a></li>
+      <li><a href="roles.html" style="color: inherit; text-decoration: none;">Roles y Permisos</a></li>
+      <li><a href="usuarios.html" style="color: inherit; text-decoration: none;">Usuarios</a></li>
+
+      <div class="section-title"><b>Gestión ▿</b></div>
+      <li><a href="proveedores.html" style="color: inherit; text-decoration: none;">Proveedores</a></li>
+    </ul>
+  </div>
+
+  <!-- CONTENIDO -->
+  <div class="content">
+    <h2>✏️ Editar Proceso</h2>
+
+    <!-- ID agregado para enganchar con JS -->
+    <form id="form-editar-proceso" class="info-card">
+      <!-- Datos principales -->
+      <div class="section-title">Información general</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Título</label>
+          <input type="text" value="Va Justiniano Carcamo Tronconis">
+        </div>
+        <div class="form-group">
+          <label>ISBN</label>
+          <input type="text" value="9786287768024">
+        </div>
+        <div class="form-group">
+          <label>Cantidad</label>
+          <input type="number" value="22">
+        </div>
+        <div class="form-group">
+          <label>Total línea</label>
+          <input type="text" value="5000.00">
+        </div>
+        <div class="form-group">
+          <label>Fase actual</label>
+          <select>
+            <option>Recepción</option>
+            <option>Empaste</option>
+            <option>Digitalización</option>
+            <option>Control de Calidad</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Estado</label>
+          <select>
+            <option>Pendiente</option>
+            <option>En Proceso</option>
+            <option>Finalizado</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Fases seleccionables -->
+      <div class="section-title">Fases del proceso</div>
+      <div class="checkbox-group">
+        <label><input type="checkbox"> Catalogación</label>
+        <label><input type="checkbox"> Terminado Final</label>
+        <label><input type="checkbox"> Empaste</label>
+        <label><input type="checkbox"> Alistamiento</label>
+        <label><input type="checkbox"> Cambios de Estado</label>
+        <label><input type="checkbox"> Entrega Final</label>
+        <label><input type="checkbox"> Digitalización</label>
+        <label><input type="checkbox"> Control de Calidad</label>
+      </div>
+
+      <!-- Acciones -->
+      <div class="actions">
+        <button type="submit" class="btn primary">Guardar cambios</button>
+        <button type="button" class="btn secondary" onclick="window.location.href='detalle-procesos.html'">Cancelar</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Script -->
+  <script src="../assets/js/control-procesos/editar-proceso.js"></script>
+</body>
+</html>

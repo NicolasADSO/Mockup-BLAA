@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Detalle de Proceso - BlaaFlow</title>
+  <link rel="stylesheet" href="../assets/css/layout.css">
+  <link rel="stylesheet" href="../assets/css/control-procesos/procesos.css"> 
+</head>
+<body>
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <img src="../assets/img/logo-sin-fondo.png" alt="Logo Gadier">
+    <div class="search-profile">
+      <input type="text" placeholder="Buscar...">
+      <div class="profile">A</div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <ul>
+      <li class="active">
+        <a href="dashboard.html" style="color: inherit; text-decoration: none;">Dashboard Admin</a>
+      </li>
+
+      <div class="section-title"><b>Fases Especializadas ▿</b></div>
+      <li><a href="../empaste/empaste.html" style="color: inherit; text-decoration: none;">Encuadernación / Empaste</a></li>
+      <li><a href="../catalogacion/catalogacion.html" style="color: inherit; text-decoration: none;">Catalogaciones</a></li>
+      <li><a href="../entrega/entrega.html" style="color: inherit; text-decoration: none;">Entrega Final</a></li>
+      <li><a href="../digitalizacion/digitalizacion.html" style="color: inherit; text-decoration: none;">Digitalización</a></li>
+      <li><a href="../calidad/calidad.html" style="color: inherit; text-decoration: none;">Control de Calidad</a></li>
+      <li><a href="../terminado/terminado.html" style="color: inherit; text-decoration: none;">Terminado Final</a></li>
+      <li><a href="../alistamiento/alistamiento.html" style="color: inherit; text-decoration: none;">Alistamiento</a></li>
+
+      <div class="section-title"><b>Seguimiento ▿</b></div>
+      <li><a href="historial.html" style="color: inherit; text-decoration: none;">Historial de Procesos</a></li>
+      <li><a href="../control-procesos/procesos.html" style="color: inherit; text-decoration: none;">Control de Procesos</a></li>
+
+      <div class="section-title"><b>Configuración ▿</b></div>
+      <li><a href="permisos.html" style="color: inherit; text-decoration: none;">Permisos</a></li>
+      <li><a href="fases.html" style="color: inherit; text-decoration: none;">Fases del Proceso</a></li>
+      <li><a href="roles.html" style="color: inherit; text-decoration: none;">Roles y Permisos</a></li>
+      <li><a href="usuarios.html" style="color: inherit; text-decoration: none;">Usuarios</a></li>
+
+      <div class="section-title"><b>Gestión ▿</b></div>
+      <li><a href="proveedores.html" style="color: inherit; text-decoration: none;">Proveedores</a></li>
+    </ul>
+  </div>
+  <!-- CONTENIDO -->
+  <div class="content">
+    <h2>📘 Detalle de Proceso</h2>
+    <div class="actions">
+      <button class="btn" onclick="window.location.href='editar-proceso.html'">Editar</button>
+      <button class="btn red">Eliminar</button>
+      <button class="btn">Exportar Excel</button>
+      <button class="btn">Exportar PDF</button>
+    </div>
+
+    <!-- INFO CARD -->
+    <div class="info-card">
+      <p><b>Título:</b> Va Justiniano Carcamo Tronconis</p>
+      <p><b>ISBN:</b> 9786287768024</p>
+      <p><b>Cantidad:</b> 22</p>
+      <p><b>Total línea:</b> $5,000.00</p>
+      <p><b>Estado:</b> Pendiente</p>
+      <p><b>Fase actual:</b> Recepción</p>
+      <p><b>Número de Orden:</b> 123456</p>
+    </div>
+  </div>
+</body>
+</html>

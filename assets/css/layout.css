@@ -1,0 +1,142 @@
+/* === LAYOUT BASE === */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f7f7fb;
+  display: flex;
+}
+
+/* === NAVBAR === */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 10;
+}
+
+.navbar img { height: 40px; }
+
+.search-profile {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.search-profile input {
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.profile {
+  background: #990f0c;
+  color: #fff;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* === SIDEBAR === */
+.sidebar {
+  width: 230px;
+  background: #111;
+  color: #fff;
+  height: 100vh;
+  padding-top: 20px;
+  position: fixed;
+  top: 60px;
+  left: 0;
+  overflow-y: auto;
+}
+
+.sidebar ul { list-style: none; padding: 0; }
+
+.sidebar ul li {
+  padding: 12px 20px;
+  cursor: pointer;
+}
+
+.sidebar ul li:hover,
+.sidebar ul li.active {
+  background: #990f0c;
+}
+
+.sidebar .section-title {
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin: 20px 0 5px 20px;
+  text-transform: uppercase;
+  color: #bbb;
+}
+.sidebar ul li a {
+  color: #fff;
+  text-decoration: none;
+  display: block;
+}
+
+.sidebar ul li a:hover {
+  color: #fff;
+  background: #7f0c0a;
+  border-radius: 5px;
+}
+
+.sidebar ul li a.active {
+  background: #990f0c;
+  color: #fff;
+  border-radius: 5px;
+}
+
+/* === CONTENIDO === */
+.content {
+  margin-left: 230px;
+  margin-top: 60px;
+  padding: 20px;
+  width: calc(100% - 230px);
+}
+
+.content h2 {
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #990f0c;
+}
+/* === TABLAS === */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+table th, table td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+table th {
+  background: #f0f0f0;
+  color: #333;
+}
+
+table tr:hover {
+  background: #fafafa;
+}
+

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Terminado Final - BlaaFlow</title>
+  <link rel="stylesheet" href="../assets/css/layout.css">
+  <link rel="stylesheet" href="../assets/css/terminado/terminado.css">
+</head>
+<body>
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <img src="../assets/img/logo-sin-fondo.png" alt="Logo BlaaFlow">
+    <div class="search-profile">
+      <input type="text" placeholder="Buscar...">
+      <div class="profile">A</div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <ul>
+      <li><a href="../dashboard.html">Dashboard Admin</a></li>
+
+      <div class="section-title"><b>Fases Especializadas ▿</b></div>
+      <li><a href="../empaste/empaste.html">Encuadernación / Empaste</a></li>
+      <li><a href="../catalogacion/catalogacion.html">Catalogaciones</a></li>
+      <li><a href="../entrega/entrega.html">Entrega Final</a></li>
+      <li><a href="../digitalizacion/digitalizacion.html">Digitalización</a></li>
+      <li><a href="../calidad/calidad.html">Control de Calidad</a></li>
+      <li><a href="../terminado/terminado.html" class="active">Terminado Final</a></li>
+      <li><a href="../alistamiento/alistamiento.html">Alistamiento</a></li>
+
+      <div class="section-title"><b>Seguimiento ▿</b></div>
+      <li><a href="../control-procesos/procesos.html">Control de Procesos</a></li>
+
+      <div class="section-title"><b>Configuración ▿</b></div>
+      <li><a href="../configuracion/permisos.html">Permisos</a></li>
+      <li><a href="../configuracion/fases.html">Fases del Proceso</a></li>
+      <li><a href="../configuracion/roles.html">Roles y Permisos</a></li>
+      <li><a href="../configuracion/usuarios.html">Usuarios</a></li>
+
+      <div class="section-title"><b>Gestión ▿</b></div>
+      <li><a href="../gestion/proveedores.html">Proveedores</a></li>
+    </ul>
+  </div>
+
+  <!-- CONTENIDO -->
+  <div class="content">
+    <div class="header">
+      <h2>📑 Terminado Final</h2>
+    </div>
+
+    <!-- Bloque de orden -->
+    <div class="order-block">
+      <button class="order-header" onclick="toggleOrder('order-tf01')">
+        Número de Orden: TF-2025-01 <span class="arrow">▼</span>
+      </button>
+      <div id="order-tf01" class="order-content hidden">
+        <table class="process-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Libro</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>001</td>
+              <td>Ejemplo Libro</td>
+              <td><span class="badge green">Completado</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <script src="../assets/js/terminado/terminado.js"></script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f7f7fb;
+      display: flex;
+    }
+
+    /* === SIDEBAR === */
+    .sidebar {
+      width: 230px;
+      background: #111;
+      color: #fff;
+      height: 100vh;
+      padding-top: 20px;
+      position: fixed;
+      top: 60px; /* porque el navbar mide 60px */
+      left: 0;
+      overflow-y: auto;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar ul li {
+      padding: 12px 20px;
+      cursor: pointer;
+    }
+
+    .sidebar ul li:hover,
+    .sidebar ul li.active {
+      background: #990f0c;
+    }
+
+    .sidebar .section-title {
+      font-size: 0.8rem;
+      font-weight: bold;
+      margin: 20px 0 5px 20px;
+      text-transform: uppercase;
+      color: #bbb;
+    }
+
+    /* === NAVBAR === */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 10;
+    }
+
+    .navbar img {
+      height: 40px;
+    }
+
+    .navbar .search-profile {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .navbar input {
+      padding: 5px 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .profile {
+      background: #990f0c;
+      color: #fff;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    /* === CONTENIDO === */
+    .content {
+      margin-left: 230px;
+      margin-top: 60px;
+      padding: 20px;
+      width: calc(100% - 230px);
+    }
+
+    .content h2 {
+      display: flex;
+      align-items: center;
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      color: #990f0c;
+    }
+
+    /* === ESTADÍSTICAS === */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 25px 15px;
+      text-align: center;
+      font-weight: bold;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      height: 120px; /* 🔹 fija altura uniforme */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    .card.red { background: #d62828; color: #fff; }
+    .card.gray { background: #6c757d; color: #fff; }
+    .card.black { background: #000; color: #fff; }
+    .card.lightgray { background: #adb5bd; color: #fff; }
+
+    /* === GRÁFICOS === */
+    .charts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .chart-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+  
