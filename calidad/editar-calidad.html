@@ -51,7 +51,7 @@
     <div class="edit-card edit-form">
       <h3 class="section-title">Información de Control de Calidad</h3>
 
-      <form action="#" method="post">
+      <form id="form-calidad">
         <div class="field">
           <label>Revisor:</label>
           <input type="text" name="revisor" placeholder="Nombre del revisor">
@@ -94,5 +94,33 @@
       </form>
     </div>
   </div>
+
+  <!-- Scripts -->
+  <script src="../assets/js/flujo.js"></script>
+  <script>
+    document.getElementById('form-calidad').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const id = FLUJO.readId();
+      const datos = {
+        revisor: this.revisor.value,
+        fecha_revision: this.fecha_revision.value,
+        resultado: this.resultado.value,
+        checklist: {
+          paginas_completas: this.paginas_completas.checked,
+          encuadernacion_firme: this.encuadernacion_firme.checked,
+          sin_manchas: this.sin_manchas.checked,
+          metadatos_correctos: this.metadatos_correctos.checked,
+        },
+        observaciones: this.observaciones.value,
+      };
+
+      // Guardamos datos de la fase
+      FLUJO.guardarFase(id, 'calidad', datos);
+
+      // Pasamos a la siguiente fase
+      FLUJO.goDetalleSiguiente(id);
+    });
+  </script>
 </body>
 </html>

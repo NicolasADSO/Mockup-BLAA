@@ -51,7 +51,7 @@
     <div class="edit-card edit-form">
       <h3 class="section-title">Información de Alistamiento</h3>
 
-      <form action="#" method="post">
+      <form id="form-alistamiento">
         <div class="field">
           <label>Materiales Usados:</label>
           <input type="text" name="materiales" placeholder="Papel, pegamento…">
@@ -69,5 +69,25 @@
       </form>
     </div>
   </div>
+
+  <!-- Scripts -->
+  <script src="../assets/js/flujo.js"></script>
+  <script>
+    document.getElementById('form-alistamiento').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const id = FLUJO.readId();
+      const datos = {
+        materiales: this.materiales.value,
+        fecha_inicio: this.fecha_inicio.value,
+      };
+
+      // Guardamos la fase actual
+      FLUJO.guardarFase(id, 'alistamiento', datos);
+
+      // Avanzamos a la siguiente fase
+      FLUJO.goDetalleSiguiente(id);
+    });
+  </script>
 </body>
 </html>

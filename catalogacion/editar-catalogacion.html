@@ -51,7 +51,7 @@
     <div class="edit-card edit-form">
       <h3 class="section-title">Información de Catalogación</h3>
 
-      <form action="#" method="post">
+      <form id="form-catalogacion">
         <div class="field">
           <label>Código de Catalogación:</label>
           <input type="text" name="codigo_catalogo" placeholder="Ej: CAT-123">
@@ -69,5 +69,25 @@
       </form>
     </div>
   </div>
+
+  <!-- Scripts -->
+  <script src="../assets/js/flujo.js"></script>
+  <script>
+    document.getElementById('form-catalogacion').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const id = FLUJO.readId();
+      const datos = {
+        codigo_catalogo: this.codigo_catalogo.value,
+        observaciones: this.observaciones.value,
+      };
+
+      // Guardar fase en el flujo
+      FLUJO.guardarFase(id, 'catalogacion', datos);
+
+      // Ir a la siguiente fase
+      FLUJO.goDetalleSiguiente(id);
+    });
+  </script>
 </body>
 </html>
