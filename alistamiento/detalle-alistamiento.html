@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <title>Detalle de Alistamiento - BlaaFlow</title>
   <link rel="stylesheet" href="../assets/css/layout.css">
-  <link rel="stylesheet" href="../assets/css/alistamiento/alistamiento.css"> 
+  <link rel="stylesheet" href="../assets/css/detalle.css">
+  <link rel="stylesheet" href="../assets/css/alistamiento/alistamiento.css">
 </head>
 <body>
   <!-- NAVBAR -->
@@ -46,43 +47,55 @@
 
   <!-- CONTENIDO -->
   <div class="content">
-    <h2>📘 Detalle de Alistamiento</h2>
+    <h2>📑 Detalle de Alistamiento</h2>
 
     <!-- Botones principales -->
     <div class="actions">
       <button class="btn" onclick="window.location.href='editar-alistamiento.html'">Editar</button>
-      <button class="btn red">Eliminar</button>
+      <button class="btn red" onclick="FLUJO.eliminar(FLUJO.readId())">Eliminar</button>
       <button class="btn">Exportar Excel</button>
       <button class="btn">Exportar PDF</button>
     </div>
 
-    <!-- INFO CARD GENERAL -->
+    <!-- Información general del libro -->
     <div class="info-card">
-      <p><b>Título:</b> Libro en Proceso</p>
-      <p><b>ISBN:</b> 9789581122334</p>
-      <p><b>Cantidad:</b> 4</p>
-      <p><b>Total línea:</b> $150,000</p>
-      <p><b>Estado:</b> En Alistamiento</p>
-      <p><b>Fase actual:</b> Alistamiento</p>
-      <p><b>Número de Orden:</b> ALI-2025-01</p>
+      <p><b>Título:</b><span id="titulo"> Libro en Proceso</p>
+      <p><b>ISBN:</b><span id="isbn"> 9789587654321</p>
+      <p><b>Cantidad:</b><span id="cantidad"> 1</p>
+      <p><b>Número de Orden:</b><span id="orden">  AL-2025-01</p>
+      <p><b>Estado:</b><span id="estado"> En Alistamiento</p>
+      <p><b>Fase actual:</b><span id="fase"> Alistamiento</p>
     </div>
 
-    <!-- FORMULARIO DE ALISTAMIENTO -->
-    <div class="info-card" style="margin-top: 2rem;">
-      <h3>📑 Información de Alistamiento</h3>
+    <!-- Información de Alistamiento (solo lectura) -->
+    <div class="form-section">
+      <h3>Información de Alistamiento</h3>
       <form>
-        <label><b>Materiales Usados:</b></label><br>
-        <input type="text" placeholder="Ej: Papel, Pegamento, Hilo..." style="padding:8px; border-radius:6px; width:300px;"><br><br>
-
-        <label><b>Responsable del Alistamiento:</b></label><br>
-        <input type="text" placeholder="Nombre del responsable" style="padding:8px; border-radius:6px; width:250px;"><br><br>
-
-        <label><b>Observaciones:</b></label><br>
-        <textarea rows="4" style="width:100%; border-radius:6px; padding:8px;"></textarea><br><br>
-
-        <button type="submit" class="btn">Guardar Cambios</button>
+        <div>
+          <label>Materiales Usados:</label>
+          <input type="text" value="Papel, pegamento" readonly>
+        </div>
+        <div>
+          <label>Responsable:</label>
+          <input type="text" value="Juan Pérez" readonly>
+        </div>
+        <div>
+          <label>Fecha de Inicio:</label>
+          <input type="date" value="2025-09-20" readonly>
+        </div>
+        <div>
+          <label>Fecha de Fin:</label>
+          <input type="date" value="2025-09-22" readonly>
+        </div>
+        <div style="grid-column: span 2;">
+          <label>Observaciones:</label>
+          <textarea readonly>El libro fue preparado con refuerzos de papel especial.</textarea>
+        </div>
       </form>
     </div>
   </div>
+  <script src="../assets/js/eliminar.js"></script>
+  <script src="../assets/js/flujo.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', FLUJO.hidratarDetalle);</script>
 </body>
 </html>

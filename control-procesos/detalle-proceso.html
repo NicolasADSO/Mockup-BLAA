@@ -51,21 +51,24 @@
     <h2>📘 Detalle de Proceso</h2>
     <div class="actions">
       <button class="btn" onclick="window.location.href='editar-proceso.html'">Editar</button>
-      <button class="btn red">Eliminar</button>
+      <button class="btn red" onclick="FLUJO.eliminar(FLUJO.readId())">Eliminar</button>
       <button class="btn">Exportar Excel</button>
       <button class="btn">Exportar PDF</button>
     </div>
 
     <!-- INFO CARD -->
     <div class="info-card">
-      <p><b>Título:</b> Va Justiniano Carcamo Tronconis</p>
-      <p><b>ISBN:</b> 9786287768024</p>
-      <p><b>Cantidad:</b> 22</p>
+      <p><b>Título:</b><span id="titulo"> Va Justiniano Carcamo Tronconis</p>
+      <p><b>ISBN:</b><span id="isbn"> 9786287768024</p>
+      <p><b>Cantidad:</b><span id="cantidad"> 22</p>
       <p><b>Total línea:</b> $5,000.00</p>
-      <p><b>Estado:</b> Pendiente</p>
-      <p><b>Fase actual:</b> Recepción</p>
-      <p><b>Número de Orden:</b> 123456</p>
+      <p><b>Estado:</b><span id="estado"> Pendiente</p>
+      <p><b>Fase actual:</b><span id="fase"> Recepción</p>
+      <p><b>Número de Orden:</b><span id="orden"> 123456</p>
     </div>
   </div>
+  <script src="../assets/js/eliminar.js"></script>
+  <script src="../assets/js/flujo.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', FLUJO.hidratarDetalle);</script>
 </body>
 </html>

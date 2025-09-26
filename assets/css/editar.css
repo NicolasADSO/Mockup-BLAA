@@ -1,0 +1,115 @@
+/* ======= Variables base ======= */
+:root{
+  --primary:#990f0c;
+  --primary-600:#7f0c0a;
+  --surface:#ffffff;
+  --muted:#6b7280;
+  --radius:12px;
+  --shadow:0 6px 16px rgba(0,0,0,.08);
+  --border:#ececec;
+}
+
+/* ======= Título de página ======= */
+.content .page-title{
+  font-size:1.6rem;
+  color:var(--primary);
+  display:flex;
+  align-items:center;
+  gap:.5rem;
+  margin-bottom:18px;
+}
+
+/* ======= Card / contenedor del formulario ======= */
+.edit-card{
+  background:var(--surface);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  border:1px solid var(--border);
+  padding:22px;
+}
+
+/* ======= Headings dentro del form ======= */
+.edit-card .section-title{
+  margin:0 0 14px 0;
+  font-size:1.05rem;
+  color:var(--primary);
+  border-bottom:2px solid #e7e7e7;
+  padding-bottom:6px;
+}
+
+/* ======= Grid del formulario ======= */
+.edit-form form{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+  gap:16px 20px;
+}
+
+/* ======= Campos ======= */
+.field{ display:flex; flex-direction:column; }
+.field label{
+  font-weight:600;
+  color:#333;
+  margin-bottom:6px;
+  font-size:.92rem;
+}
+.field input,
+.field select,
+.field textarea{
+  width:100%;
+  padding:10px 12px;
+  border:1px solid #d1d5db;
+  border-radius:10px;
+  background:#fff;
+  font-size:.95rem;
+  transition:border-color .15s, box-shadow .15s, background .15s;
+}
+.field textarea{ min-height:96px; resize:vertical; }
+
+/* Enfoque agradable */
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+  outline:0;
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px rgba(153,15,12,.12);
+}
+
+/* Ayudas y spans de dos columnas */
+.field .hint{ color:var(--muted); font-size:.82rem; margin-top:6px; }
+.two-cols{ grid-column:span 2; }
+
+/* ======= Footer de acciones ======= */
+.form-footer{
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+  margin-top:6px;
+}
+
+/* ======= Botones ======= */
+.btn{
+  background:var(--primary);
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  padding:10px 14px;
+  font-weight:700;
+  cursor:pointer;
+  transition:background .15s, transform .06s;
+}
+.btn:hover{ background:var(--primary-600); }
+.btn:active{ transform:translateY(1px); }
+
+.btn.ghost{
+  background:#fff;
+  color:#374151;
+  border:1px solid #e5e7eb;
+}
+.btn.outline{
+  background:transparent;
+  color:var(--primary);
+  border:1px solid var(--primary);
+}
+
+/* ======= Espaciado del contenedor general ======= */
+.actions{ margin-bottom:18px; }

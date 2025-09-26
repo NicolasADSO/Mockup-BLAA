@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Detalle de Control de Calidad - BlaaFlow</title>
   <link rel="stylesheet" href="../assets/css/layout.css">
+  <link rel="stylesheet" href="../assets/css/detalle.css">
   <link rel="stylesheet" href="../assets/css/calidad/calidad.css"> 
 </head>
 <body>
@@ -51,39 +52,39 @@
     <!-- Botones principales -->
     <div class="actions">
       <button class="btn" onclick="window.location.href='editar-calidad.html'">Editar</button>
-      <button class="btn red">Eliminar</button>
+      <button class="btn red" onclick="FLUJO.eliminar(FLUJO.readId())">Eliminar</button>
       <button class="btn">Exportar Excel</button>
       <button class="btn">Exportar PDF</button>
     </div>
 
     <!-- INFO CARD GENERAL -->
     <div class="info-card">
-      <p><b>Título:</b> Literatura Universal</p>
-      <p><b>ISBN:</b> 9789589876543</p>
-      <p><b>Cantidad:</b> 2</p>
-      <p><b>Total línea:</b> $80,000</p>
-      <p><b>Estado:</b> Pendiente</p>
-      <p><b>Fase actual:</b> Control de Calidad</p>
-      <p><b>Número de Orden:</b> CC-2025-01</p>
+      <p><b>Título:</b><span id="titulo"> Literatura Universal</p>
+      <p><b>ISBN:</b><span id="isbn"> 9789589876543</p>
+      <p><b>Cantidad:</b><span id="cantidad"> 2</p>
+      <p><b>Total línea:</b><span id="total"> $80,000</p>
+      <p><b>Estado:</b><span id="estado"> Pendiente</p>
+      <p><b>Fase actual:</b><span id="fase"> Control de Calidad</p>
+      <p><b>Número de Orden:</b><span id="orden"> CC-2025-01</p>
     </div>
 
-    <!-- FORMULARIO DE CONTROL DE CALIDAD -->
-    <div class="info-card" style="margin-top: 2rem;">
+    <!-- FORMULARIO DE CONTROL DE CALIDAD (solo lectura) -->
+    <div class="form-section">
       <h3>📑 Información de Control de Calidad</h3>
       <form>
-        <label><b>Observaciones:</b></label><br>
-        <textarea rows="4" style="width:100%; border-radius:6px; padding:8px;"></textarea><br><br>
-
-        <label><b>Estado de revisión:</b></label><br>
-        <select style="padding:8px; border-radius:6px; width:200px;">
-          <option>Pendiente</option>
-          <option>Aprobado</option>
-          <option>Rechazado</option>
-        </select><br><br>
-
-        <button type="submit" class="btn">Guardar Cambios</button>
+        <div style="grid-column: span 2;">
+          <label>Observaciones:</label>
+          <textarea readonly>El libro presenta leves manchas, requiere verificación final.</textarea>
+        </div>
+        <div>
+          <label>Estado de revisión:</label>
+          <input type="text" value="Pendiente" readonly>
+        </div>
       </form>
     </div>
   </div>
+  <script src="../assets/js/eliminar.js"></script>
+  <script src="../assets/js/flujo.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', FLUJO.hidratarDetalle);</script>
 </body>
 </html>

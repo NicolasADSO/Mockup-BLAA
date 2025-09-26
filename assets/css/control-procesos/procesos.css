@@ -165,3 +165,46 @@
   align-items: center;
   margin-bottom: 1.5rem; /* 🔹 añade espacio debajo del header */
 }
+
+/* Botones de acción en las tablas */
+.process-table td .btn {
+  display: inline-block;
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  margin: 2px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s ease;
+}
+
+/* Estilos diferenciados */
+.process-table td .btn {
+  background: #007bff;   /* Azul (Ver) */
+  color: white;
+}
+.process-table td .btn:hover {
+  background: #0056b3;
+}
+
+.process-table td .btn.green {
+  background: #28a745;   /* Verde (Siguiente) */
+}
+.process-table td .btn.green:hover {
+  background: #1e7e34;
+}
+
+.process-table td .btn.red {
+  background: #dc3545;   /* Rojo (Eliminar) */
+}
+.process-table td .btn.red:hover {
+  background: #a71d2a;
+}
+
+/* Ajustar celda de acciones */
+.process-table td {
+  vertical-align: middle;
+}
+.process-table td:last-child {
+  white-space: nowrap;
+}

@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Detalle de Entrega Final - BlaaFlow</title>
   <link rel="stylesheet" href="../assets/css/layout.css">
+  <link rel="stylesheet" href="../assets/css/detalle.css">
   <link rel="stylesheet" href="../assets/css/entrega/entrega.css"> 
 </head>
 <body>
@@ -51,38 +52,43 @@
     <!-- Botones principales -->
     <div class="actions">
       <button class="btn" onclick="window.location.href='editar-entrega.html'">Editar</button>
-      <button class="btn red">Eliminar</button>
+      <button class="btn red" onclick="FLUJO.eliminar(FLUJO.readId())">Eliminar</button>
       <button class="btn">Exportar Excel</button>
       <button class="btn">Exportar PDF</button>
     </div>
 
     <!-- INFO CARD GENERAL -->
     <div class="info-card">
-      <p><b>Título:</b> Literatura Universal</p>
-      <p><b>ISBN:</b> 9789589876543</p>
-      <p><b>Cantidad:</b> 2</p>
-      <p><b>Total línea:</b> $80,000</p>
-      <p><b>Estado:</b> Pendiente de Entrega</p>
-      <p><b>Fase actual:</b> Entrega Final</p>
-      <p><b>Número de Orden:</b> ENT-2025-01</p>
+      <p><b>Título:</b><span id="titulo">Literatura Universal</p>
+      <p><b>ISBN:</b><span id="isbn"> 9789589876543</p>
+      <p><b>Cantidad:</b><span id="cantidad"> 2</p>
+      <p><b>Total línea:</b><span id="total"> $80,000</p>
+      <p><b>Estado:</b><span id="estado"> Pendiente de Entrega</p>
+      <p><b>Fase actual:</b><span id="fase"> Entrega Final</p>
+      <p><b>Número de Orden:</b><span id="orden"> ENT-2025-01</p>
     </div>
 
-    <!-- FORMULARIO DE ENTREGA -->
-    <div class="info-card" style="margin-top: 2rem;">
+    <!-- FORMULARIO DE ENTREGA (solo lectura) -->
+    <div class="form-section">
       <h3>📑 Información de Entrega Final</h3>
       <form>
-        <label><b>Fecha de Entrega:</b></label><br>
-        <input type="date" style="padding:8px; border-radius:6px; width:200px;"><br><br>
-
-        <label><b>Responsable de Entrega:</b></label><br>
-        <input type="text" placeholder="Nombre del responsable" style="padding:8px; border-radius:6px; width:250px;"><br><br>
-
-        <label><b>Observaciones:</b></label><br>
-        <textarea rows="4" style="width:100%; border-radius:6px; padding:8px;"></textarea><br><br>
-
-        <button type="submit" class="btn">Guardar Cambios</button>
+        <div>
+          <label>Fecha de Entrega:</label>
+          <input type="date" value="2025-09-25" readonly>
+        </div>
+        <div>
+          <label>Responsable de Entrega:</label>
+          <input type="text" value="María González" readonly>
+        </div>
+        <div style="grid-column: span 2;">
+          <label>Observaciones:</label>
+          <textarea readonly>Los libros se entregaron en perfecto estado con acta firmada.</textarea>
+        </div>
       </form>
     </div>
   </div>
+  <script src="../assets/js/eliminar.js"></script>
+  <script src="../assets/js/flujo.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', FLUJO.hidratarDetalle);</script>
 </body>
 </html>

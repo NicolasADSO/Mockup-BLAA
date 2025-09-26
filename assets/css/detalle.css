@@ -1,0 +1,107 @@
+/* === CONTENEDORES === */
+.content h2 {
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+  color: #990f0c;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.actions {
+  margin-bottom: 20px;
+}
+
+/* === BOTONES === */
+.btn {
+  background: #990f0c;
+  color: #fff;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-right: 10px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.btn:hover {
+  background: #7f0c0a;
+}
+
+.btn.red {
+  background: #d62828;
+}
+
+.btn.red:hover {
+  background: #a00;
+}
+
+/* === TARJETA DE INFORMACIÓN GENERAL === */
+.info-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.info-card h3 {
+  margin-bottom: 15px;
+  color: #990f0c;
+}
+
+/* === FORMULARIO DE FASE (solo lectura) === */
+.form-section {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  margin-bottom: 20px;
+}
+
+.form-section h3 {
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+  color: #990f0c;
+  border-bottom: 2px solid #C2BABA;
+  padding-bottom: 5px;
+}
+
+/* Grid de campos */
+.form-section form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px 20px;
+}
+
+/* Etiquetas */
+.form-section label {
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+}
+
+/* Inputs solo lectura */
+.form-section input[readonly],
+.form-section textarea[readonly] {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #f9f9f9;
+  color: #555;
+  font-size: 0.9rem;
+  resize: none;
+  cursor: not-allowed;
+}
+
+/* Ajuste para textareas grandes */
+.form-section textarea {
+  min-height: 80px;
+}

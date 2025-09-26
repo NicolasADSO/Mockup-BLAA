@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Detalle de Catalogación - BlaaFlow</title>
   <link rel="stylesheet" href="../assets/css/layout.css">
+  <link rel="stylesheet" href="../assets/css/detalle.css">
   <link rel="stylesheet" href="../assets/css/catalogacion/catalogacion.css"> 
 </head>
 <body>
@@ -50,39 +51,48 @@
 
     <!-- Botones principales -->
     <div class="actions">
-      <button class="btn" onclick="window.location.href='editar-catalogaciones.html'">Editar</button>
-      <button class="btn red">Eliminar</button>
+      <button class="btn" onclick="window.location.href='editar-catalogacion.html'">Editar</button>
+      <button class="btn red" onclick="FLUJO.eliminar(FLUJO.readId())">Eliminar</button>
       <button class="btn">Exportar Excel</button>
       <button class="btn">Exportar PDF</button>
     </div>
 
-    <!-- INFO CARD GENERAL -->
+    <!-- Información general -->
     <div class="info-card">
-      <p><b>Título:</b> Libro Catalogado</p>
-      <p><b>ISBN:</b> 9789589876543</p>
-      <p><b>Cantidad:</b> 1</p>
-      <p><b>Código de Catálogo:</b> CAT-123</p>
-      <p><b>Estado:</b> Pendiente</p>
-      <p><b>Fase actual:</b> Catalogación</p>
-      <p><b>Número de Orden:</b> CAT-2025-01</p>
+      <p><b>Título:</b><span id="titulo"> Libro Catalogado</p>
+      <p><b>ISBN:</b><span id="isbn"> 9789589876543</p>
+      <p><b>Cantidad:</b><span id="cantidad"> 1</p>
+      <p><strong>Código de Catálogo:</strong><span id="codigo">CAT-123</span></p>
+      <p><b>Estado:</b><span id="estado"> Pendiente</p>
+      <p><b>Fase actual:</b><span id="fase"> Catalogación</p>
+      <p><b>Número de Orden:</b><span id="orden"> CAT-2025-01</p>
     </div>
 
-    <!-- FORMULARIO DE CATALOGACIÓN -->
-    <div class="info-card" style="margin-top: 2rem;">
-      <h3>📑 Información de Catalogación</h3>
+    <!-- Información de Catalogación (solo lectura) -->
+    <div class="form-section">
+      <h3>Información de Catalogación</h3>
       <form>
-        <label><b>Código de Catálogo:</b></label><br>
-        <input type="text" value="CAT-123" style="padding:8px; border-radius:6px; width:200px;"><br><br>
-
-        <label><b>Clasificación Dewey:</b></label><br>
-        <input type="text" placeholder="Ej: 860 - Literatura española" style="padding:8px; border-radius:6px; width:300px;"><br><br>
-
-        <label><b>Observaciones:</b></label><br>
-        <textarea rows="4" style="width:100%; border-radius:6px; padding:8px;"></textarea><br><br>
-
-        <button type="submit" class="btn">Guardar Cambios</button>
+        <div>
+          <label>Clasificación:</label>
+          <input type="text" value="Dewey 020" readonly>
+        </div>
+        <div>
+          <label>Autor:</label>
+          <input type="text" value="Gabriel García Márquez" readonly>
+        </div>
+        <div>
+          <label>Año de Publicación:</label>
+          <input type="number" value="1985" readonly>
+        </div>
+        <div style="grid-column: span 2;">
+          <label>Notas:</label>
+          <textarea readonly>Edición con ilustraciones.</textarea>
+        </div>
       </form>
     </div>
   </div>
+  <script src="../assets/js/eliminar.js"></script>
+  <script src="../assets/js/flujo.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', FLUJO.hidratarDetalle);</script>
 </body>
 </html>

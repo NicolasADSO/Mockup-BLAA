@@ -94,13 +94,20 @@
         </table>
         <!-- Botón para crear proceso -->
         <div style="margin-top: 1.5rem;">
-          <a href="#" class="btn" onclick="crearProceso()">Crear Proceso</a>
-        </div>
+        <!-- Ejemplo en procesos.html -->
+        <button class="btn" onclick="
+          const id = Date.now();
+          const orden = document.getElementById('orden').value || 'ORD-0001';
+          const proveedor = document.getElementById('proveedor').value || 'sin-proveedor';
+          FLUJO.crear({id, titulo: proveedor, cantidad:1, orden});
+          FLUJO.goDetalleActual(id);
+        ">Crear proceso</button>        </div>
       </div>
     </div>
   </div>
 
   <!-- Script principal -->
+  <script src="../assets/js/flujo.js"></script>
   <script src="../assets/js/control-procesos/nuevo-proceso.js"></script>
 </body>
 </html>
