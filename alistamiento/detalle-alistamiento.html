@@ -2,9 +2,9 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Detalle de Terminado Final - BlaaFlow</title>
+  <title>Detalle de Alistamiento - BlaaFlow</title>
   <link rel="stylesheet" href="../assets/css/layout.css">
-  <link rel="stylesheet" href="../assets/css/terminado/terminado.css"> 
+  <link rel="stylesheet" href="../assets/css/alistamiento/alistamiento.css"> 
 </head>
 <body>
   <!-- NAVBAR -->
@@ -27,8 +27,8 @@
       <li><a href="../entrega/entrega.html">Entrega Final</a></li>
       <li><a href="../digitalizacion/digitalizacion.html">Digitalización</a></li>
       <li><a href="../calidad/calidad.html">Control de Calidad</a></li>
-      <li><a href="../terminado/terminado.html" class="active">Terminado Final</a></li>
-      <li><a href="../alistamiento/alistamiento.html">Alistamiento</a></li>
+      <li><a href="../terminado/terminado.html">Terminado Final</a></li>
+      <li><a href="../alistamiento/alistamiento.html" class="active">Alistamiento</a></li>
 
       <div class="section-title"><b>Seguimiento ▿</b></div>
       <li><a href="../control-procesos/procesos.html">Control de Procesos</a></li>
@@ -46,11 +46,11 @@
 
   <!-- CONTENIDO -->
   <div class="content">
-    <h2>📘 Detalle de Terminado Final</h2>
+    <h2>📘 Detalle de Alistamiento</h2>
 
     <!-- Botones principales -->
     <div class="actions">
-      <button class="btn" onclick="window.location.href='editar-terminado.html'">Editar</button>
+      <button class="btn" onclick="window.location.href='editar-alistamiento.html'">Editar</button>
       <button class="btn red">Eliminar</button>
       <button class="btn">Exportar Excel</button>
       <button class="btn">Exportar PDF</button>
@@ -58,29 +58,24 @@
 
     <!-- INFO CARD GENERAL -->
     <div class="info-card">
-      <p><b>Título:</b> Ejemplo Libro</p>
-      <p><b>ISBN:</b> 9789587654321</p>
-      <p><b>Cantidad:</b> 5</p>
-      <p><b>Total línea:</b> $200,000</p>
-      <p><b>Estado:</b> En Terminado</p>
-      <p><b>Fase actual:</b> Terminado Final</p>
-      <p><b>Número de Orden:</b> TER-2025-01</p>
+      <p><b>Título:</b> Libro en Proceso</p>
+      <p><b>ISBN:</b> 9789581122334</p>
+      <p><b>Cantidad:</b> 4</p>
+      <p><b>Total línea:</b> $150,000</p>
+      <p><b>Estado:</b> En Alistamiento</p>
+      <p><b>Fase actual:</b> Alistamiento</p>
+      <p><b>Número de Orden:</b> ALI-2025-01</p>
     </div>
 
-    <!-- FORMULARIO DE TERMINADO -->
+    <!-- FORMULARIO DE ALISTAMIENTO -->
     <div class="info-card" style="margin-top: 2rem;">
-      <h3>📑 Información de Terminado Final</h3>
+      <h3>📑 Información de Alistamiento</h3>
       <form>
-        <label><b>Tipo de acabado:</b></label><br>
-        <select style="padding:8px; border-radius:6px; width:220px;">
-          <option>Plastificado</option>
-          <option>Brillante</option>
-          <option>Mate</option>
-          <option>Sin acabado</option>
-        </select><br><br>
+        <label><b>Materiales Usados:</b></label><br>
+        <input type="text" placeholder="Ej: Papel, Pegamento, Hilo..." style="padding:8px; border-radius:6px; width:300px;"><br><br>
 
-        <label><b>Fecha de finalización:</b></label><br>
-        <input type="date" style="padding:8px; border-radius:6px; width:200px;"><br><br>
+        <label><b>Responsable del Alistamiento:</b></label><br>
+        <input type="text" placeholder="Nombre del responsable" style="padding:8px; border-radius:6px; width:250px;"><br><br>
 
         <label><b>Observaciones:</b></label><br>
         <textarea rows="4" style="width:100%; border-radius:6px; padding:8px;"></textarea><br><br>

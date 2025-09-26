@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Detalle de Digitalización - BlaaFlow</title>
+  <link rel="stylesheet" href="../assets/css/layout.css">
+  <link rel="stylesheet" href="../assets/css/digitalizacion/digitalizacion.css"> 
+</head>
+<body>
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <img src="../assets/img/logo-sin-fondo.png" alt="Logo BlaaFlow">
+    <div class="search-profile">
+      <input type="text" placeholder="Buscar...">
+      <div class="profile">A</div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <ul>
+      <li><a href="../dashboard.html">Dashboard Admin</a></li>
+
+      <div class="section-title"><b>Fases Especializadas ▿</b></div>
+      <li><a href="../empaste/empaste.html">Encuadernación / Empaste</a></li>
+      <li><a href="../catalogacion/catalogacion.html">Catalogaciones</a></li>
+      <li><a href="../entrega/entrega.html">Entrega Final</a></li>
+      <li><a href="../digitalizacion/digitalizacion.html" class="active">Digitalización</a></li>
+      <li><a href="../calidad/calidad.html">Control de Calidad</a></li>
+      <li><a href="../terminado/terminado.html">Terminado Final</a></li>
+      <li><a href="../alistamiento/alistamiento.html">Alistamiento</a></li>
+
+      <div class="section-title"><b>Seguimiento ▿</b></div>
+      <li><a href="../control-procesos/procesos.html">Control de Procesos</a></li>
+
+      <div class="section-title"><b>Configuración ▿</b></div>
+      <li><a href="../configuracion/permisos.html">Permisos</a></li>
+      <li><a href="../configuracion/fases.html">Fases del Proceso</a></li>
+      <li><a href="../configuracion/roles.html">Roles y Permisos</a></li>
+      <li><a href="../configuracion/usuarios.html">Usuarios</a></li>
+
+      <div class="section-title"><b>Gestión ▿</b></div>
+      <li><a href="../gestion/proveedores.html">Proveedores</a></li>
+    </ul>
+  </div>
+
+  <!-- CONTENIDO -->
+  <div class="content">
+    <h2>📘 Detalle de Digitalización</h2>
+
+    <!-- Botones principales -->
+    <div class="actions">
+      <button class="btn" onclick="window.location.href='editar-digitalizacion.html'">Editar</button>
+      <button class="btn red">Eliminar</button>
+      <button class="btn">Exportar Excel</button>
+      <button class="btn">Exportar PDF</button>
+    </div>
+
+    <!-- INFO CARD GENERAL -->
+    <div class="info-card">
+      <p><b>Título:</b> Historia de Colombia</p>
+      <p><b>ISBN:</b> 9789581234567</p>
+      <p><b>Cantidad:</b> 3</p>
+      <p><b>Total línea:</b> $120,000</p>
+      <p><b>Estado:</b> Pendiente</p>
+      <p><b>Fase actual:</b> Digitalización</p>
+      <p><b>Número de Orden:</b> DIG-2025-01</p>
+    </div>
+
+    <!-- FORMULARIO DE DIGITALIZACIÓN -->
+    <div class="info-card" style="margin-top: 2rem;">
+      <h3>📑 Información de Digitalización</h3>
+      <form>
+        <label><b>Archivo Digital:</b></label><br>
+        <input type="file" style="margin-bottom: 15px;"><br><br>
+
+        <label><b>Formato:</b></label><br>
+        <select style="padding:8px; border-radius:6px; width:200px;">
+          <option>PDF</option>
+          <option>JPEG</option>
+          <option>TIFF</option>
+          <option>Otro</option>
+        </select><br><br>
+
+        <label><b>Resolución (DPI):</b></label><br>
+        <input type="number" placeholder="300" style="padding:8px; border-radius:6px; width:120px;"><br><br>
+
+        <label><b>Observaciones:</b></label><br>
+        <textarea rows="4" style="width:100%; border-radius:6px; padding:8px;"></textarea><br><br>
+
+        <button type="submit" class="btn">Guardar Cambios</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
