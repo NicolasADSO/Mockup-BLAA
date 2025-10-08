@@ -19,19 +19,27 @@
   <!-- SIDEBAR -->
   <div class="sidebar">
     <ul>
-      <li>
-        <a href="../dashboard.html">Dashboard Admin</a>
-      </li>
+      <li><a href="../dashboard.html">Dashboard Admin</a></li>
       <div class="section-title"><b>Fases Especializadas ▿</b></div>
-      <li><a href="../empaste/empaste.html">Encuadernación</a></li>
+      <li><a href="../empaste/empaste.html">Encuadernación / Empaste</a></li>
       <li><a href="../catalogacion/catalogacion.html">Catalogaciones</a></li>
       <li><a href="../entrega/entrega.html">Entrega Final</a></li>
       <li><a href="../digitalizacion/digitalizacion.html">Digitalización</a></li>
       <li><a href="../calidad/calidad.html">Control de Calidad</a></li>
       <li><a href="../terminado/terminado.html">Terminado Final</a></li>
       <li><a href="../alistamiento/alistamiento.html">Alistamiento</a></li>
+
       <div class="section-title"><b>Seguimiento ▿</b></div>
       <li class="active"><a href="../control-procesos/procesos.html">Control de Procesos</a></li>
+
+      <div class="section-title"><b>Configuración ▿</b></div>
+      <li><a href="../configuracion/permisos.html">Permisos</a></li>
+      <li><a href="../configuracion/fases.html">Fases del Proceso</a></li>
+      <li><a href="../configuracion/roles.html">Roles y Permisos</a></li>
+      <li><a href="../configuracion/usuarios.html">Usuarios</a></li>
+
+      <div class="section-title"><b>Gestión ▿</b></div>
+      <li><a href="../gestion/proveedores.html">Proveedores</a></li>
     </ul>
   </div>
 
@@ -41,15 +49,19 @@
       <h2>📑 Control de Procesos</h2>
       <a href="nuevo-proceso.html" class="btn"> + Nuevo Proceso</a>
     </div>
-
-    <!-- Contenedor dinámico -->
     <div id="orders-container"></div>
-  </div> 
+  </div>
 
-  <!-- Scripts -->
+  <!-- Librerías necesarias -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+  <!-- Script de flujo general -->
   <script src="../assets/js/flujo.js"></script>
+
+  <!-- Script interno para renderizar procesos -->
   <script>
-    // Función para agrupar procesos por número de orden
+    // === Agrupar procesos por orden ===
     function agruparPorOrden() {
       const procesos = [];
       for (let i = 0; i < localStorage.length; i++) {
@@ -59,15 +71,16 @@
         }
       }
 
-      // Agrupar por numero de orden
       const grupos = {};
       procesos.forEach(p => {
-        if (!grupos[p.orden]) grupos[p.orden] = [];
-        grupos[p.orden].push(p);
+        const orden = p.orden || "Sin Orden";
+        if (!grupos[orden]) grupos[orden] = [];
+        grupos[orden].push(p);
       });
       return grupos;
     }
 
+    // === Renderizar tabla de procesos ===
     function renderProcesos() {
       const container = document.getElementById("orders-container");
       container.innerHTML = "";
@@ -76,13 +89,15 @@
 
       Object.keys(grupos).forEach(orden => {
         const procesos = grupos[orden];
-        const orderId = "order-" + orden;
+        const orderId = "order-" + orden.replace(/\s+/g, "_");
 
         const block = document.createElement("div");
         block.classList.add("order-block");
         block.innerHTML = `
           <button class="order-header" onclick="toggleOrder('${orderId}')">
-            Número de Orden: ${orden} <span class="arrow">▼</span>
+            Número de Orden: ${orden}
+            <span class="count">(${procesos.length} procesos)</span>
+            <span class="arrow">▼</span>
           </button>
           <div id="${orderId}" class="order-content hidden">
             <table class="process-table">
@@ -92,25 +107,39 @@
                   <th>ISBN</th>
                   <th>Cantidad</th>
                   <th>Valor</th>
-                  <th>Fase</th>
+                  <th>Estado / Fase</th>
+                  <th>Fecha Finalización</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
-                ${procesos.map(p => `
-                  <tr>
-                    <td>${p.titulo}</td>
-                    <td>${p.isbn || "-"}</td>
-                    <td>${p.cantidad}</td>
-                    <td>${p.valor || "-"}</td>
-                    <td>${p.fase}</td>
-                    <td>
-                      <button class="btn" onclick="FLUJO.goDetalleActual('${p.id}')">Ver</button>
-                      <button class="btn" onclick="FLUJO.avanzar('${p.id}')">Siguiente</button>
-                      <button class="btn red" onclick="FLUJO.eliminar('${p.id}')">Eliminar</button>
-                    </td>
-                  </tr>
-                `).join("")}
+                ${procesos.map(p => {
+                  const estado = p.estado || p.fase || "-";
+                  let badgeClass = "badge red";
+
+                  if (estado === "Finalizado") badgeClass = "badge green";
+                  else if (estado === "entrega") badgeClass = "badge yellow";
+
+                  return `
+                    <tr>
+                      <td>${p.titulo || "—"}</td>
+                      <td>${p.isbn || "—"}</td>
+                      <td>${p.cantidad || 1}</td>
+                      <td>${p.valor || "-"}</td>
+                      <td><span class="${badgeClass}">${estado}</span></td>
+                      <td>${p.fechaFinalizacion || "-"}</td>
+                      <td>
+                        ${p.estado === "Finalizado"
+                          ? `<button class="btn btn-pdf" data-id="${p.id}">📄 Acta PDF</button>`
+                          : `
+                            <button class="btn" onclick="FLUJO.goDetalleActual('${p.id}')">Ver</button>
+                            <button class="btn blue" onclick="FLUJO.avanzar('${p.id}')">Siguiente</button>
+                            <button class="btn red" onclick="FLUJO.eliminar('${p.id}')">Eliminar</button>
+                          `}
+                      </td>
+                    </tr>
+                  `;
+                }).join("")}
               </tbody>
             </table>
           </div>
@@ -119,13 +148,39 @@
       });
     }
 
-    // Función para desplegar/plegar bloques
+    // === Mostrar / ocultar bloques ===
     function toggleOrder(id) {
       const content = document.getElementById(id);
       if (content) content.classList.toggle("hidden");
     }
 
+    // === Listener para generar Acta PDF ===
+    document.addEventListener("click", (e) => {
+      if (e.target.classList.contains("btn-pdf")) {
+        const id = e.target.getAttribute("data-id");
+        const procesos = Object.keys(localStorage)
+          .filter(k => k.startsWith("proceso_"))
+          .map(k => JSON.parse(localStorage.getItem(k)));
+        const proceso = procesos.find(p => p.id === id);
+
+        if (!proceso) {
+          alert("❌ No se encontró el proceso para generar el PDF.");
+          return;
+        }
+
+        // Llamar a la función modular del acta
+        if (typeof generarActaPDF === "function") {
+          generarActaPDF(proceso);
+        } else {
+          console.error("⚠️ La función generarActaPDF no está definida. Revisa acta-pdf.js");
+        }
+      }
+    });
+
     document.addEventListener("DOMContentLoaded", renderProcesos);
   </script>
+
+  <!-- Script modular del acta PDF -->
+  <script src="../assets/js/acta-pdf.js?v=5"></script>
 </body>
 </html>

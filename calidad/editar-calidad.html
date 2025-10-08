@@ -115,10 +115,10 @@
         observaciones: this.observaciones.value,
       };
 
-      // Guardamos datos de la fase
+      // Guardamos datos de la fase actual
       FLUJO.guardarFase(id, 'calidad', datos);
 
-      // Pasamos a la siguiente fase
+      // Avanzamos a la siguiente fase (terminado)
       FLUJO.goDetalleSiguiente(id);
     });
   </script>

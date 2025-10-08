@@ -53,42 +53,75 @@
     <div class="actions">
       <button class="btn" onclick="window.location.href='editar-terminado.html'">Editar</button>
       <button class="btn red" onclick="FLUJO.eliminar(FLUJO.readId())">Eliminar</button>
+      <button id="guardarTerminadoBtn" class="btn success">Guardar Terminado</button>
       <button class="btn">Exportar Excel</button>
       <button class="btn">Exportar PDF</button>
     </div>
 
     <!-- INFO CARD GENERAL -->
     <div class="info-card">
-      <p><b>Título:</b><span id="titulo">Ejemplo Libro</span></p>
-      <p><b>ISBN:</b><span id="isbn">9789587654321</span></p>
-      <p><b>Cantidad:</b><span id="cantidad">5</span></p>
-      <p><b>Total línea:</b><span id="total">$200,000</span></p>
-      <p><b>Estado:</b><span id="estado">En Terminado</span></p>
-      <p><b>Fase actual:</b><span id="fase">Terminado Final</span></p>
-      <p><b>Número de Orden:</b><span id="orden"> TER-2025-01</span></p>
+      <p><b>Título:</b> <span id="titulo">Ejemplo Libro</span></p>
+      <p><b>ISBN:</b> <span id="isbn">9789587654321</span></p>
+      <p><b>Cantidad:</b> <span id="cantidad">5</span></p>
+      <p><b>Total línea:</b> <span id="total">$200,000</span></p>
+      <p><b>Estado:</b> <span id="estado">En Terminado</span></p>
+      <p><b>Fase actual:</b> <span id="fase">Terminado Final</span></p>
+      <p><b>Número de Orden:</b> <span id="orden">TER-2025-01</span></p>
     </div>
 
-    <!-- FORMULARIO DE TERMINADO (solo lectura) -->
+    <!-- FORMULARIO DE TERMINADO -->
     <div class="form-section">
       <h3>📑 Información de Terminado Final</h3>
-      <form>
+      <form id="formTerminado">
         <div>
           <label>Tipo de acabado:</label>
-          <input type="text" value="Plastificado brillante" readonly>
+          <input type="text" name="tipoAcabado" value="Plastificado brillante">
         </div>
         <div>
           <label>Fecha de finalización:</label>
-          <input type="date" value="2025-09-27" readonly>
+          <input type="date" name="fechaFin" value="2025-09-27">
         </div>
         <div style="grid-column: span 2;">
           <label>Observaciones:</label>
-          <textarea readonly>El libro fue terminado con acabado plastificado brillante en portada y lomo reforzado.</textarea>
+          <textarea name="observaciones">El libro fue terminado con acabado plastificado brillante en portada y lomo reforzado.</textarea>
         </div>
       </form>
     </div>
   </div>
+
+  <!-- Scripts -->
   <script src="../assets/js/eliminar.js"></script>
   <script src="../assets/js/flujo.js"></script>
-  <script>document.addEventListener('DOMContentLoaded', FLUJO.hidratarDetalle);</script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      FLUJO.hidratarDetalle();
+
+      const id = FLUJO.readId?.();
+      if (!id) return;
+
+      const form = document.getElementById("formTerminado");
+      const btnGuardar = document.getElementById("guardarTerminadoBtn");
+
+      if (btnGuardar && form) {
+        btnGuardar.addEventListener("click", (e) => {
+          e.preventDefault();
+
+          // Tomar valores del formulario
+          const datos = {
+            tipoAcabado: form.querySelector("input[name='tipoAcabado']").value.trim(),
+            fechaFin: form.querySelector("input[name='fechaFin']").value,
+            observaciones: form.querySelector("textarea[name='observaciones']").value.trim(),
+            fechaRegistro: new Date().toISOString().slice(0, 10),
+            responsable: "Terminado (Andrés Torres)"
+          };
+
+          // Guardar dentro del proceso actual
+          FLUJO.guardarFase(id, "terminado", datos);
+
+          alert("✅ Datos de Terminado Final guardados correctamente.");
+        });
+      }
+    });
+  </script>
 </body>
 </html>

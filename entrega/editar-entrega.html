@@ -51,7 +51,7 @@
     <div class="edit-card edit-form">
       <h3 class="section-title">Información de Entrega</h3>
 
-      <form action="#" method="post">
+      <form id="form-entrega">
         <div class="field">
           <label>Responsable de Entrega:</label>
           <input type="text" name="responsable" placeholder="Nombre del responsable">
@@ -74,5 +74,26 @@
       </form>
     </div>
   </div>
+
+  <!-- Scripts -->
+  <script src="../assets/js/flujo.js"></script>
+  <script>
+    document.getElementById('form-entrega').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const id = FLUJO.readId();
+      const datos = {
+        responsable: this.responsable.value,
+        fecha_entrega: this.fecha_entrega.value,
+        observaciones: this.observaciones.value,
+      };
+
+      // Guardar datos de la fase
+      FLUJO.guardarFase(id, 'entrega', datos);
+
+      // Avanzar a la siguiente fase
+      FLUJO.goDetalleSiguiente(id);
+    });
+  </script>
 </body>
 </html>

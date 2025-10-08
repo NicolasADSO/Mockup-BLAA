@@ -53,38 +53,70 @@
     <div class="actions">
       <button class="btn" onclick="window.location.href='editar-calidad.html'">Editar</button>
       <button class="btn red" onclick="FLUJO.eliminar(FLUJO.readId())">Eliminar</button>
+      <button id="guardarCalidadBtn" class="btn success">Guardar Calidad</button>
       <button class="btn">Exportar Excel</button>
       <button class="btn">Exportar PDF</button>
     </div>
 
     <!-- INFO CARD GENERAL -->
     <div class="info-card">
-      <p><b>Título:</b><span id="titulo"> Literatura Universal</p>
-      <p><b>ISBN:</b><span id="isbn"> 9789589876543</p>
-      <p><b>Cantidad:</b><span id="cantidad"> 2</p>
-      <p><b>Total línea:</b><span id="total"> $80,000</p>
-      <p><b>Estado:</b><span id="estado"> Pendiente</p>
-      <p><b>Fase actual:</b><span id="fase"> Control de Calidad</p>
-      <p><b>Número de Orden:</b><span id="orden"> CC-2025-01</p>
+      <p><b>Título:</b> <span id="titulo">Literatura Universal</span></p>
+      <p><b>ISBN:</b> <span id="isbn">9789589876543</span></p>
+      <p><b>Cantidad:</b> <span id="cantidad">2</span></p>
+      <p><b>Total línea:</b> <span id="total">$80,000</span></p>
+      <p><b>Estado:</b> <span id="estado">Pendiente</span></p>
+      <p><b>Fase actual:</b> <span id="fase">Control de Calidad</span></p>
+      <p><b>Número de Orden:</b> <span id="orden">CC-2025-01</span></p>
     </div>
 
-    <!-- FORMULARIO DE CONTROL DE CALIDAD (solo lectura) -->
+    <!-- FORMULARIO DE CONTROL DE CALIDAD -->
     <div class="form-section">
       <h3>📑 Información de Control de Calidad</h3>
-      <form>
+      <form id="formCalidad">
         <div style="grid-column: span 2;">
           <label>Observaciones:</label>
-          <textarea readonly>El libro presenta leves manchas, requiere verificación final.</textarea>
+          <textarea name="observaciones">El libro presenta leves manchas, requiere verificación final.</textarea>
         </div>
         <div>
           <label>Estado de revisión:</label>
-          <input type="text" value="Pendiente" readonly>
+          <input type="text" name="estadoRevision" value="Pendiente">
         </div>
       </form>
     </div>
   </div>
+
+  <!-- Scripts -->
   <script src="../assets/js/eliminar.js"></script>
   <script src="../assets/js/flujo.js"></script>
-  <script>document.addEventListener('DOMContentLoaded', FLUJO.hidratarDetalle);</script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      FLUJO.hidratarDetalle();
+
+      const id = FLUJO.readId?.();
+      if (!id) return;
+
+      const form = document.getElementById("formCalidad");
+      const btnGuardar = document.getElementById("guardarCalidadBtn");
+
+      if (btnGuardar && form) {
+        btnGuardar.addEventListener("click", (e) => {
+          e.preventDefault();
+
+          // Tomar datos del formulario
+          const datos = {
+            observaciones: form.querySelector("textarea[name='observaciones']").value.trim(),
+            estadoRevision: form.querySelector("input[name='estadoRevision']").value.trim(),
+            fecha: new Date().toISOString().slice(0, 10),
+            responsable: "Control de Calidad (María Rojas)"
+          };
+
+          // Guardar en localStorage usando el motor de flujo
+          FLUJO.guardarFase(id, "calidad", datos);
+
+          alert("✅ Datos de Control de Calidad guardados correctamente.");
+        });
+      }
+    });
+  </script>
 </body>
 </html>

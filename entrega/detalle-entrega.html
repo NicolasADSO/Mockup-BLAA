@@ -53,42 +53,95 @@
     <div class="actions">
       <button class="btn" onclick="window.location.href='editar-entrega.html'">Editar</button>
       <button class="btn red" onclick="FLUJO.eliminar(FLUJO.readId())">Eliminar</button>
+      <button id="guardarEntregaBtn" class="btn success">Guardar Entrega</button>
+      <button id="finalizarBtn" class="btn green">Finalizar Proceso</button>
       <button class="btn">Exportar Excel</button>
       <button class="btn">Exportar PDF</button>
     </div>
 
     <!-- INFO CARD GENERAL -->
     <div class="info-card">
-      <p><b>Título:</b><span id="titulo">Literatura Universal</p>
-      <p><b>ISBN:</b><span id="isbn"> 9789589876543</p>
-      <p><b>Cantidad:</b><span id="cantidad"> 2</p>
-      <p><b>Total línea:</b><span id="total"> $80,000</p>
-      <p><b>Estado:</b><span id="estado"> Pendiente de Entrega</p>
-      <p><b>Fase actual:</b><span id="fase"> Entrega Final</p>
-      <p><b>Número de Orden:</b><span id="orden"> ENT-2025-01</p>
+      <p><b>Título:</b> <span id="titulo">Literatura Universal</span></p>
+      <p><b>ISBN:</b> <span id="isbn">9789589876543</span></p>
+      <p><b>Cantidad:</b> <span id="cantidad">2</span></p>
+      <p><b>Total línea:</b> <span id="total">$80,000</span></p>
+      <p><b>Estado:</b> <span id="estado">Pendiente de Entrega</span></p>
+      <p><b>Fase actual:</b> <span id="fase">Entrega Final</span></p>
+      <p><b>Número de Orden:</b> <span id="orden">ENT-2025-01</span></p>
     </div>
 
-    <!-- FORMULARIO DE ENTREGA (solo lectura) -->
+    <!-- FORMULARIO DE ENTREGA -->
     <div class="form-section">
       <h3>📑 Información de Entrega Final</h3>
-      <form>
+      <form id="formEntrega">
         <div>
           <label>Fecha de Entrega:</label>
-          <input type="date" value="2025-09-25" readonly>
+          <input type="date" name="fechaEntrega" value="2025-09-25">
         </div>
         <div>
           <label>Responsable de Entrega:</label>
-          <input type="text" value="María González" readonly>
+          <input type="text" name="responsable" value="María González">
         </div>
         <div style="grid-column: span 2;">
           <label>Observaciones:</label>
-          <textarea readonly>Los libros se entregaron en perfecto estado con acta firmada.</textarea>
+          <textarea name="observaciones">Los libros se entregaron en perfecto estado con acta firmada.</textarea>
         </div>
       </form>
     </div>
   </div>
+
+  <!-- Scripts -->
   <script src="../assets/js/eliminar.js"></script>
   <script src="../assets/js/flujo.js"></script>
-  <script>document.addEventListener('DOMContentLoaded', FLUJO.hidratarDetalle);</script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      FLUJO.hidratarDetalle();
+
+      const id = FLUJO.readId?.();
+      if (!id) return;
+
+      const form = document.getElementById("formEntrega");
+      const btnGuardar = document.getElementById("guardarEntregaBtn");
+      const btnFinalizar = document.getElementById("finalizarBtn");
+
+      // ✅ Guardar Entrega
+      if (btnGuardar && form) {
+        btnGuardar.addEventListener("click", (e) => {
+          e.preventDefault();
+
+          const datos = {
+            fechaEntrega: form.querySelector("input[name='fechaEntrega']").value,
+            responsable: form.querySelector("input[name='responsable']").value.trim(),
+            observaciones: form.querySelector("textarea[name='observaciones']").value.trim(),
+            fechaRegistro: new Date().toISOString().slice(0, 10)
+          };
+
+          FLUJO.guardarFase(id, "entrega", datos);
+          alert("✅ Datos de Entrega Final guardados correctamente.");
+        });
+      }
+
+      // ✅ Finalizar Proceso
+      if (btnFinalizar) {
+        btnFinalizar.addEventListener("click", () => {
+          const confirmar = confirm("¿Deseas marcar este proceso como FINALIZADO?");
+          if (!confirmar) return;
+
+          const proceso = FLUJO.get(id);
+          if (!proceso) {
+            alert("❌ No se encontró el proceso.");
+            return;
+          }
+
+          proceso.estado = "Finalizado";
+          proceso.fechaFinalizacion = new Date().toISOString().slice(0, 10);
+          FLUJO.set(proceso);
+
+          alert("🎉 Proceso finalizado con éxito.");
+          window.location.href = "../control-procesos/procesos.html";
+        });
+      }
+    });
+  </script>
 </body>
 </html>

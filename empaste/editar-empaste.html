@@ -88,5 +88,28 @@
       </form>
     </div>
   </div>
+
+  <!-- Scripts -->
+  <script src="../assets/js/flujo.js"></script>
+  <script>
+    document.getElementById('form-empaste').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const id = FLUJO.readId();
+      const datos = {
+        tipo_encuadernacion: this.tipo_encuadernacion.value,
+        materiales: this.materiales.value,
+        fecha_inicio: this.fecha_inicio.value,
+        fecha_final: this.fecha_final.value,
+        observaciones: this.observaciones.value,
+      };
+
+      // Guardar datos de la fase
+      FLUJO.guardarFase(id, 'empaste', datos);
+
+      // Pasar a la siguiente fase
+      FLUJO.goDetalleSiguiente(id);
+    });
+  </script>
 </body>
 </html>

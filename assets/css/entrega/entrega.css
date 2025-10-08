@@ -165,3 +165,11 @@
   align-items: center;
   margin-bottom: 1.5rem; /* 🔹 añade espacio debajo del header */
 }
+/* Botón finalizar (verde) */
+.btn.success {
+  background: #2e7d32;
+}
+
+.btn.success:hover {
+  background: #1b5e20;
+}

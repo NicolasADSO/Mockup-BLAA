@@ -26,7 +26,9 @@
       <li><a href="../catalogacion/catalogacion.html">Catalogaciones</a></li>
       <li><a href="../entrega/entrega.html">Entrega Final</a></li>
       <li><a href="../digitalizacion/digitalizacion.html">Digitalización</a></li>
-      <li><a href="../calidad/calidad.html" class="active">Control de Calidad</a></li>
+      <li class="active">
+        <a href="../calidad/calidad.html" >Control de Calidad</a>
+      </li>
       <li><a href="../terminado/terminado.html">Terminado Final</a></li>
       <li><a href="../alistamiento/alistamiento.html">Alistamiento</a></li>
 
@@ -47,71 +49,84 @@
   <!-- CONTENIDO -->
   <div class="content">
     <div class="header">
-      <h2>📑 Procesos en Control de Calidad</h2>
+      <h2>📑 Control de Calidad</h2>
     </div>
 
-    <!-- Ejemplo de Orden -->
-    <div class="order-block">
-      <button class="order-header" onclick="toggleOrder('order-cc01')">
-        Número de Orden: CC-2025-01 <span class="arrow">▼</span>
-      </button>
-      <div id="order-cc01" class="order-content hidden">
-        <table class="process-table">
-          <thead>
-            <tr>
-              <th>Título</th>
-              <th>ISBN</th>
-              <th>Cantidad</th>
-              <th>Estado</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr onclick="window.location.href='detalle-calidad.html'" style="cursor:pointer;">
-              <td>Literatura Universal</td>
-              <td>9789589876543</td>
-              <td>2</td>
-              <td><span class="badge yellow">Pendiente</span></td>
-            </tr>
-            <tr onclick="window.location.href='detalle-calidad.html'" style="cursor:pointer;">
-              <td>Historia de Colombia</td>
-              <td>9789581234567</td>
-              <td>1</td>
-              <td><span class="badge green">Finalizado</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Otro ejemplo de orden -->
-    <div class="order-block">
-      <button class="order-header" onclick="toggleOrder('order-cc02')">
-        Número de Orden: CC-2025-02 <span class="arrow">▼</span>
-      </button>
-      <div id="order-cc02" class="order-content hidden">
-        <table class="process-table">
-          <thead>
-            <tr>
-              <th>Título</th>
-              <th>ISBN</th>
-              <th>Cantidad</th>
-              <th>Estado</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr onclick="window.location.href='detalle-calidad.html'" style="cursor:pointer;">
-              <td>Enciclopedia Universal</td>
-              <td>9789587654321</td>
-              <td>4</td>
-              <td><span class="badge red">En Proceso</span></td>
-            </tr>
-          </tbody>
-        </table>
-
-        
-      </div>
-    </div>
+    <!-- Contenedor dinámico -->
+    <div id="ordenes-container"></div>
   </div>
-  <script src="../assets/js/calidad/calidad.js"></script>
+
+  <!-- Scripts -->
+  <script src="../assets/js/flujo.js"></script>
+  <script>
+    function toggleOrder(id) {
+      const elem = document.getElementById(id);
+      if (!elem) return;
+      elem.classList.toggle("hidden");
+    }
+
+    const container = document.getElementById("ordenes-container");
+    const procesosPorOrden = {};
+
+    // Agrupar procesos en fase "calidad" por número de orden
+    Object.keys(localStorage).forEach(k => {
+      if (!k.startsWith("proceso_")) return;
+      const p = JSON.parse(localStorage.getItem(k));
+      if (p.fase !== "calidad") return;
+
+      if (!procesosPorOrden[p.orden]) procesosPorOrden[p.orden] = [];
+      procesosPorOrden[p.orden].push(p);
+    });
+
+    // Renderizar bloques de orden
+    Object.keys(procesosPorOrden).forEach((orden, idx) => {
+      const blockId = `order-calidad-${idx}`;
+      const procesos = procesosPorOrden[orden];
+
+      const block = document.createElement("div");
+      block.classList.add("order-block");
+      block.innerHTML = `
+        <button class="order-header" onclick="toggleOrder('${blockId}')">
+          Número de Orden: ${orden} <span class="arrow">▼</span>
+        </button>
+        <div id="${blockId}" class="order-content hidden">
+          <table class="process-table">
+            <thead>
+              <tr>
+                <th>ISBN</th>
+                <th>Título</th>
+                <th>Cantidad</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${procesos.map(p => `
+                <tr data-url="detalle-calidad.html?id=${p.id}">
+                  <td>${p.isbn || "-"}</td>
+                  <td>${p.titulo}</td>
+                  <td>${p.cantidad || 1}</td>
+                  <td>
+                    <button class="btn" onclick="window.location.href='editar-calidad.html?id=${p.id}'">Editar</button>
+                    <button class="btn red" onclick="FLUJO.eliminar('${p.id}')">Eliminar</button>
+                  </td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+      container.appendChild(block);
+    });
+
+    // Click en fila → ir al detalle
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll("tr[data-url]").forEach(row => {
+        row.addEventListener("click", (e) => {
+          if (e.target.tagName.toLowerCase() === "button") return;
+          window.location.href = row.dataset.url;
+        });
+      });
+    });
+  </script>
 </body>
 </html>

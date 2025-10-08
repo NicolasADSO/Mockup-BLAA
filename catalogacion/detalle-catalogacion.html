@@ -53,46 +53,80 @@
     <div class="actions">
       <button class="btn" onclick="window.location.href='editar-catalogacion.html'">Editar</button>
       <button class="btn red" onclick="FLUJO.eliminar(FLUJO.readId())">Eliminar</button>
+      <button id="guardarCatalogacionBtn" class="btn success">Guardar Catalogación</button>
       <button class="btn">Exportar Excel</button>
       <button class="btn">Exportar PDF</button>
     </div>
 
     <!-- Información general -->
     <div class="info-card">
-      <p><b>Título:</b><span id="titulo"> Libro Catalogado</p>
-      <p><b>ISBN:</b><span id="isbn"> 9789589876543</p>
-      <p><b>Cantidad:</b><span id="cantidad"> 1</p>
-      <p><strong>Código de Catálogo:</strong><span id="codigo">CAT-123</span></p>
-      <p><b>Estado:</b><span id="estado"> Pendiente</p>
-      <p><b>Fase actual:</b><span id="fase"> Catalogación</p>
-      <p><b>Número de Orden:</b><span id="orden"> CAT-2025-01</p>
+      <p><b>Título:</b> <span id="titulo">Libro Catalogado</span></p>
+      <p><b>ISBN:</b> <span id="isbn">9789589876543</span></p>
+      <p><b>Cantidad:</b> <span id="cantidad">1</span></p>
+      <p><strong>Código de Catálogo:</strong> <span id="codigo">CAT-123</span></p>
+      <p><b>Estado:</b> <span id="estado">Pendiente</span></p>
+      <p><b>Fase actual:</b> <span id="fase">Catalogación</span></p>
+      <p><b>Número de Orden:</b> <span id="orden">CAT-2025-01</span></p>
     </div>
 
-    <!-- Información de Catalogación (solo lectura) -->
+    <!-- Información de Catalogación -->
     <div class="form-section">
-      <h3>Información de Catalogación</h3>
-      <form>
+      <h3>📑 Información de Catalogación</h3>
+      <form id="formCatalogacion">
         <div>
           <label>Clasificación:</label>
-          <input type="text" value="Dewey 020" readonly>
+          <input type="text" name="clasificacion" value="Dewey 020">
         </div>
         <div>
           <label>Autor:</label>
-          <input type="text" value="Gabriel García Márquez" readonly>
+          <input type="text" name="autor" value="Gabriel García Márquez">
         </div>
         <div>
           <label>Año de Publicación:</label>
-          <input type="number" value="1985" readonly>
+          <input type="number" name="anioPublicacion" value="1985">
         </div>
         <div style="grid-column: span 2;">
           <label>Notas:</label>
-          <textarea readonly>Edición con ilustraciones.</textarea>
+          <textarea name="notas">Edición con ilustraciones.</textarea>
         </div>
       </form>
     </div>
   </div>
+
+  <!-- Scripts -->
   <script src="../assets/js/eliminar.js"></script>
   <script src="../assets/js/flujo.js"></script>
-  <script>document.addEventListener('DOMContentLoaded', FLUJO.hidratarDetalle);</script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      FLUJO.hidratarDetalle();
+
+      const id = FLUJO.readId?.();
+      if (!id) return;
+
+      const form = document.getElementById("formCatalogacion");
+      const btnGuardar = document.getElementById("guardarCatalogacionBtn");
+
+      if (btnGuardar && form) {
+        btnGuardar.addEventListener("click", (e) => {
+          e.preventDefault();
+
+          // Capturar los valores del formulario
+          const datos = {
+            clasificacion: form.querySelector("input[name='clasificacion']").value.trim(),
+            autor: form.querySelector("input[name='autor']").value.trim(),
+            anioPublicacion: form.querySelector("input[name='anioPublicacion']").value.trim(),
+            notas: form.querySelector("textarea[name='notas']").value.trim(),
+            fecha: new Date().toISOString().slice(0, 10),
+            responsable: "Catalogación (Laura Méndez)"
+          };
+
+          // Guardar los datos de esta fase
+          FLUJO.guardarFase(id, "catalogacion", datos);
+
+          alert("✅ Datos de Catalogación guardados correctamente.");
+        });
+      }
+    });
+  </script>
 </body>
 </html>

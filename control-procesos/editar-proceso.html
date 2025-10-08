@@ -24,26 +24,25 @@
       </li>
 
       <div class="section-title"><b>Fases Especializadas ▿</b></div>
-      <li><a href="../empaste/empaste.html" style="color: inherit; text-decoration: none;">Encuadernación / Empaste</a></li>
-      <li><a href="../catalogacion/catalogacion.html" style="color: inherit; text-decoration: none;">Catalogaciones</a></li>
-      <li><a href="../entrega/entrega.html" style="color: inherit; text-decoration: none;">Entrega Final</a></li>
-      <li><a href="../digitalizacion/digitalizacion.html" style="color: inherit; text-decoration: none;">Digitalización</a></li>
-      <li><a href="../calidad/calidad.html" style="color: inherit; text-decoration: none;">Control de Calidad</a></li>
-      <li><a href="../terminado/terminado.html" style="color: inherit; text-decoration: none;">Terminado Final</a></li>
-      <li><a href="../alistamiento/alistamiento.html" style="color: inherit; text-decoration: none;">Alistamiento</a></li>
+      <li><a href="../empaste/empaste.html">Encuadernación / Empaste</a></li>
+      <li><a href="../catalogacion/catalogacion.html">Catalogaciones</a></li>
+      <li><a href="../entrega/entrega.html">Entrega Final</a></li>
+      <li><a href="../digitalizacion/digitalizacion.html">Digitalización</a></li>
+      <li><a href="../calidad/calidad.html">Control de Calidad</a></li>
+      <li><a href="../terminado/terminado.html">Terminado Final</a></li>
+      <li><a href="../alistamiento/alistamiento.html">Alistamiento</a></li>
 
       <div class="section-title"><b>Seguimiento ▿</b></div>
-      <li><a href="historial.html" style="color: inherit; text-decoration: none;">Historial de Procesos</a></li>
-      <li><a href="../control-procesos/procesos.html" style="color: inherit; text-decoration: none;">Control de Procesos</a></li>
+      <li><a href="../control-procesos/procesos.html">Control de Procesos</a></li>
 
       <div class="section-title"><b>Configuración ▿</b></div>
-      <li><a href="permisos.html" style="color: inherit; text-decoration: none;">Permisos</a></li>
-      <li><a href="fases.html" style="color: inherit; text-decoration: none;">Fases del Proceso</a></li>
-      <li><a href="roles.html" style="color: inherit; text-decoration: none;">Roles y Permisos</a></li>
-      <li><a href="usuarios.html" style="color: inherit; text-decoration: none;">Usuarios</a></li>
+      <li><a href="../configuracion/permisos.html">Permisos</a></li>
+      <li><a href="../configuracion/fases.html">Fases del Proceso</a></li>
+      <li><a href="../configuracion/roles.html">Roles y Permisos</a></li>
+      <li><a href="../configuracion/usuarios.html">Usuarios</a></li>
 
       <div class="section-title"><b>Gestión ▿</b></div>
-      <li><a href="proveedores.html" style="color: inherit; text-decoration: none;">Proveedores</a></li>
+      <li><a href="../gestion/proveedores.html">Proveedores</a></li>
     </ul>
   </div>
 
@@ -51,30 +50,29 @@
   <div class="content">
     <h2>✏️ Editar Proceso</h2>
 
-    <!-- ID agregado para enganchar con JS -->
     <form id="form-editar-proceso" class="info-card">
       <!-- Datos principales -->
       <div class="section-title">Información general</div>
       <div class="form-grid">
         <div class="form-group">
           <label>Título</label>
-          <input type="text" value="Va Justiniano Carcamo Tronconis">
+          <input type="text" name="titulo" value="Va Justiniano Carcamo Tronconis">
         </div>
         <div class="form-group">
           <label>ISBN</label>
-          <input type="text" value="9786287768024">
+          <input type="text" name="isbn" value="9786287768024">
         </div>
         <div class="form-group">
           <label>Cantidad</label>
-          <input type="number" value="22">
+          <input type="number" name="cantidad" value="22">
         </div>
         <div class="form-group">
           <label>Total línea</label>
-          <input type="text" value="5000.00">
+          <input type="text" name="total" value="5000.00">
         </div>
         <div class="form-group">
           <label>Fase actual</label>
-          <select>
+          <select name="fase">
             <option>Recepción</option>
             <option>Empaste</option>
             <option>Digitalización</option>
@@ -83,7 +81,7 @@
         </div>
         <div class="form-group">
           <label>Estado</label>
-          <select>
+          <select name="estado">
             <option>Pendiente</option>
             <option>En Proceso</option>
             <option>Finalizado</option>
@@ -94,14 +92,14 @@
       <!-- Fases seleccionables -->
       <div class="section-title">Fases del proceso</div>
       <div class="checkbox-group">
-        <label><input type="checkbox"> Catalogación</label>
-        <label><input type="checkbox"> Terminado Final</label>
-        <label><input type="checkbox"> Empaste</label>
-        <label><input type="checkbox"> Alistamiento</label>
-        <label><input type="checkbox"> Cambios de Estado</label>
-        <label><input type="checkbox"> Entrega Final</label>
-        <label><input type="checkbox"> Digitalización</label>
-        <label><input type="checkbox"> Control de Calidad</label>
+        <label><input type="checkbox" name="fases" value="catalogacion"> Catalogación</label>
+        <label><input type="checkbox" name="fases" value="terminado"> Terminado Final</label>
+        <label><input type="checkbox" name="fases" value="empaste"> Empaste</label>
+        <label><input type="checkbox" name="fases" value="alistamiento"> Alistamiento</label>
+        <label><input type="checkbox" name="fases" value="cambios"> Cambios de Estado</label>
+        <label><input type="checkbox" name="fases" value="entrega"> Entrega Final</label>
+        <label><input type="checkbox" name="fases" value="digitalizacion"> Digitalización</label>
+        <label><input type="checkbox" name="fases" value="calidad"> Control de Calidad</label>
       </div>
 
       <!-- Acciones -->
@@ -112,7 +110,31 @@
     </form>
   </div>
 
-  <!-- Script -->
-  <script src="../assets/js/control-procesos/editar-proceso.js"></script>
+  <!-- Scripts -->
+  <script src="../assets/js/flujo.js"></script>
+  <script>
+    document.getElementById('form-editar-proceso').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const id = FLUJO.readId();
+      const form = this;
+
+      const datos = {
+        titulo: form.titulo.value,
+        isbn: form.isbn.value,
+        cantidad: form.cantidad.value,
+        total: form.total.value,
+        fase: form.fase.value,
+        estado: form.estado.value,
+        fases: Array.from(form.querySelectorAll('input[name="fases"]:checked')).map(el => el.value)
+      };
+
+      // Guardar datos de la fase
+      FLUJO.guardarFase(id, 'proceso', datos);
+
+      // Redirigir a detalle de la fase seleccionada
+      FLUJO.goDetalleSiguiente(id);
+    });
+  </script>
 </body>
 </html>

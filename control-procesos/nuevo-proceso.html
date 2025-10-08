@@ -24,26 +24,26 @@
       </li>
 
       <div class="section-title"><b>Fases Especializadas ▿</b></div>
-      <li><a href="../empaste/empaste.html" style="color: inherit; text-decoration: none;">Encuadernación / Empaste</a></li>
-      <li><a href="../catalogacion/catalogacion.html" style="color: inherit; text-decoration: none;">Catalogaciones</a></li>
-      <li><a href="../entrega/entrega.html" style="color: inherit; text-decoration: none;">Entrega Final</a></li>
-      <li><a href="../digitalizacion/digitalizacion.html" style="color: inherit; text-decoration: none;">Digitalización</a></li>
-      <li><a href="../calidad/calidad.html" style="color: inherit; text-decoration: none;">Control de Calidad</a></li>
-      <li><a href="../terminado/terminado.html" style="color: inherit; text-decoration: none;">Terminado Final</a></li>
-      <li><a href="../alistamiento/alistamiento.html" style="color: inherit; text-decoration: none;">Alistamiento</a></li>
+      <li><a href="../empaste/empaste.html">Encuadernación / Empaste</a></li>
+      <li><a href="../catalogacion/catalogacion.html">Catalogaciones</a></li>
+      <li><a href="../entrega/entrega.html">Entrega Final</a></li>
+      <li><a href="../digitalizacion/digitalizacion.html">Digitalización</a></li>
+      <li><a href="../calidad/calidad.html">Control de Calidad</a></li>
+      <li><a href="../terminado/terminado.html">Terminado Final</a></li>
+      <li><a href="../alistamiento/alistamiento.html">Alistamiento</a></li>
 
       <div class="section-title"><b>Seguimiento ▿</b></div>
-      <li><a href="historial.html" style="color: inherit; text-decoration: none;">Historial de Procesos</a></li>
-      <li><a href="../control-procesos/procesos.html" style="color: inherit; text-decoration: none;">Control de Procesos</a></li>
+      <li><a href="historial.html">Historial de Procesos</a></li>
+      <li><a href="../control-procesos/procesos.html">Control de Procesos</a></li>
 
       <div class="section-title"><b>Configuración ▿</b></div>
-      <li><a href="permisos.html" style="color: inherit; text-decoration: none;">Permisos</a></li>
-      <li><a href="fases.html" style="color: inherit; text-decoration: none;">Fases del Proceso</a></li>
-      <li><a href="roles.html" style="color: inherit; text-decoration: none;">Roles y Permisos</a></li>
-      <li><a href="usuarios.html" style="color: inherit; text-decoration: none;">Usuarios</a></li>
+      <li><a href="permisos.html">Permisos</a></li>
+      <li><a href="fases.html">Fases del Proceso</a></li>
+      <li><a href="roles.html">Roles y Permisos</a></li>
+      <li><a href="usuarios.html">Usuarios</a></li>
 
       <div class="section-title"><b>Gestión ▿</b></div>
-      <li><a href="proveedores.html" style="color: inherit; text-decoration: none;">Proveedores</a></li>
+      <li><a href="proveedores.html">Proveedores</a></li>
     </ul>
   </div>
 
@@ -89,19 +89,13 @@
             </tr>
           </thead>
           <tbody id="tabla-body">
-            <!-- Aquí se insertan filas simuladas -->
+            <!-- Aquí se insertan filas editables -->
           </tbody>
         </table>
-        <!-- Botón para crear proceso -->
+        <!-- Botón para crear procesos -->
         <div style="margin-top: 1.5rem;">
-        <!-- Ejemplo en procesos.html -->
-        <button class="btn" onclick="
-          const id = Date.now();
-          const orden = document.getElementById('orden').value || 'ORD-0001';
-          const proveedor = document.getElementById('proveedor').value || 'sin-proveedor';
-          FLUJO.crear({id, titulo: proveedor, cantidad:1, orden});
-          FLUJO.goDetalleActual(id);
-        ">Crear proceso</button>        </div>
+          <button class="btn" id="crearProcesosBtn">Crear procesos</button>
+        </div>
       </div>
     </div>
   </div>

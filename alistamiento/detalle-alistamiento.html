@@ -53,49 +53,80 @@
     <div class="actions">
       <button class="btn" onclick="window.location.href='editar-alistamiento.html'">Editar</button>
       <button class="btn red" onclick="FLUJO.eliminar(FLUJO.readId())">Eliminar</button>
+      <button id="guardarAlistamientoBtn" class="btn success">Guardar Alistamiento</button>
       <button class="btn">Exportar Excel</button>
       <button class="btn">Exportar PDF</button>
     </div>
 
     <!-- Información general del libro -->
     <div class="info-card">
-      <p><b>Título:</b><span id="titulo"> Libro en Proceso</p>
-      <p><b>ISBN:</b><span id="isbn"> 9789587654321</p>
-      <p><b>Cantidad:</b><span id="cantidad"> 1</p>
-      <p><b>Número de Orden:</b><span id="orden">  AL-2025-01</p>
-      <p><b>Estado:</b><span id="estado"> En Alistamiento</p>
-      <p><b>Fase actual:</b><span id="fase"> Alistamiento</p>
+      <p><b>Título:</b> <span id="titulo">Libro en Proceso</span></p>
+      <p><b>ISBN:</b> <span id="isbn">9789587654321</span></p>
+      <p><b>Cantidad:</b> <span id="cantidad">1</span></p>
+      <p><b>Número de Orden:</b> <span id="orden">AL-2025-01</span></p>
+      <p><b>Estado:</b> <span id="estado">En Alistamiento</span></p>
+      <p><b>Fase actual:</b> <span id="fase">Alistamiento</span></p>
     </div>
 
-    <!-- Información de Alistamiento (solo lectura) -->
+    <!-- Información de Alistamiento -->
     <div class="form-section">
-      <h3>Información de Alistamiento</h3>
-      <form>
+      <h3>📑 Información de Alistamiento</h3>
+      <form id="formAlistamiento">
         <div>
           <label>Materiales Usados:</label>
-          <input type="text" value="Papel, pegamento" readonly>
+          <input type="text" name="materiales" value="Papel, pegamento">
         </div>
         <div>
           <label>Responsable:</label>
-          <input type="text" value="Juan Pérez" readonly>
+          <input type="text" name="responsable" value="Juan Pérez">
         </div>
         <div>
           <label>Fecha de Inicio:</label>
-          <input type="date" value="2025-09-20" readonly>
+          <input type="date" name="fechaInicio" value="2025-09-20">
         </div>
         <div>
           <label>Fecha de Fin:</label>
-          <input type="date" value="2025-09-22" readonly>
+          <input type="date" name="fechaFin" value="2025-09-22">
         </div>
         <div style="grid-column: span 2;">
           <label>Observaciones:</label>
-          <textarea readonly>El libro fue preparado con refuerzos de papel especial.</textarea>
+          <textarea name="observaciones">El libro fue preparado con refuerzos de papel especial.</textarea>
         </div>
       </form>
     </div>
   </div>
+
+  <!-- Scripts -->
   <script src="../assets/js/eliminar.js"></script>
   <script src="../assets/js/flujo.js"></script>
-  <script>document.addEventListener('DOMContentLoaded', FLUJO.hidratarDetalle);</script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      FLUJO.hidratarDetalle();
+
+      const id = FLUJO.readId?.();
+      if (!id) return;
+
+      const form = document.getElementById("formAlistamiento");
+      const btnGuardar = document.getElementById("guardarAlistamientoBtn");
+
+      if (btnGuardar && form) {
+        btnGuardar.addEventListener("click", (e) => {
+          e.preventDefault();
+
+          const datos = {
+            materiales: form.querySelector("input[name='materiales']").value.trim(),
+            responsable: form.querySelector("input[name='responsable']").value.trim(),
+            fechaInicio: form.querySelector("input[name='fechaInicio']").value,
+            fechaFin: form.querySelector("input[name='fechaFin']").value,
+            observaciones: form.querySelector("textarea[name='observaciones']").value.trim(),
+            fechaRegistro: new Date().toISOString().slice(0, 10)
+          };
+
+          FLUJO.guardarFase(id, "alistamiento", datos);
+          alert("✅ Datos de Alistamiento guardados correctamente.");
+        });
+      }
+    });
+  </script>
 </body>
 </html>

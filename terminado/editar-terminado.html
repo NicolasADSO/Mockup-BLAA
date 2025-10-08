@@ -51,7 +51,7 @@
     <div class="edit-card edit-form">
       <h3 class="section-title">Información de Terminado</h3>
 
-      <form action="#" method="post">
+      <form id="form-terminado">
         <div class="field two-cols">
           <label>Observaciones:</label>
           <textarea name="observaciones" placeholder="Notas del proceso de terminado"></textarea>
@@ -69,5 +69,25 @@
       </form>
     </div>
   </div>
+
+  <!-- Scripts -->
+  <script src="../assets/js/flujo.js"></script>
+  <script>
+    document.getElementById('form-terminado').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const id = FLUJO.readId();
+      const datos = {
+        observaciones: this.observaciones.value,
+        fecha_final: this.fecha_final.value,
+      };
+
+      // Guardar fase actual
+      FLUJO.guardarFase(id, 'terminado', datos);
+
+      // Avanzar a la siguiente fase
+      FLUJO.goDetalleSiguiente(id);
+    });
+  </script>
 </body>
 </html>

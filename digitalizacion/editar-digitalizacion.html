@@ -51,7 +51,7 @@
     <div class="edit-card edit-form">
       <h3 class="section-title">Información de Digitalización</h3>
 
-      <form action="#" method="post">
+      <form id="form-digitalizacion">
         <div class="field">
           <label>Operador:</label>
           <input type="text" name="operador" placeholder="Nombre del operador">
@@ -83,5 +83,27 @@
       </form>
     </div>
   </div>
+
+  <!-- Scripts -->
+  <script src="../assets/js/flujo.js"></script>
+  <script>
+    document.getElementById('form-digitalizacion').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const id = FLUJO.readId();
+      const datos = {
+        operador: this.operador.value,
+        fecha_digitalizacion: this.fecha_digitalizacion.value,
+        formato: this.formato.value,
+        resolucion: this.resolucion.value,
+      };
+
+      // Guardar datos de la fase
+      FLUJO.guardarFase(id, 'digitalizacion', datos);
+
+      // Pasar a la siguiente fase
+      FLUJO.goDetalleSiguiente(id);
+    });
+  </script>
 </body>
 </html>

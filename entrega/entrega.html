@@ -25,7 +25,9 @@
       <div class="section-title"><b>Fases Especializadas ▿</b></div>
       <li><a href="../empaste/empaste.html">Encuadernación / Empaste</a></li>
       <li><a href="../catalogacion/catalogacion.html">Catalogaciones</a></li>
-      <li><a href="../entrega/entrega.html" class="active">Entrega Final</a></li>
+      <li class="active">
+        <a href="../entrega/entrega.html">Entrega Final</a>
+      </li>
       <li><a href="../digitalizacion/digitalizacion.html">Digitalización</a></li>
       <li><a href="../calidad/calidad.html">Control de Calidad</a></li>
       <li><a href="../terminado/terminado.html">Terminado Final</a></li>
@@ -51,33 +53,83 @@
       <h2>📑 Entrega Final</h2>
     </div>
 
-    <!-- 🔹 Bloque de orden -->
-    <div class="order-block">
-      <button class="order-header" onclick="toggleOrder('order-ent01')">
-        Número de Orden: ENT-2025-01 <span class="arrow">▼</span>
-      </button>
-      <div id="order-ent01" class="order-content hidden">
-        <table class="process-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Libro</th>
-              <th>Destinatario</th>
-              <th>Estado</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr onclick="window.location.href='detalle-entrega.html'" style="cursor:pointer;">
-              <td>001</td>
-              <td>Ejemplo Libro</td>
-              <td>Biblioteca Central</td>
-              <td><span class="badge yellow">Pendiente</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <!-- Contenedor dinámico -->
+    <div id="ordenes-container"></div>
   </div>
-  <script src="../assets/js/entrega/entrega.js"></script>
+
+  <!-- Scripts -->
+  <script src="../assets/js/flujo.js"></script>
+  <script>
+    function toggleOrder(id) {
+      const elem = document.getElementById(id);
+      if (!elem) return;
+      elem.classList.toggle("hidden");
+    }
+
+    const container = document.getElementById("ordenes-container");
+    const procesosPorOrden = {};
+
+    // Agrupar procesos en fase "entrega" por número de orden
+    Object.keys(localStorage).forEach(k => {
+      if (!k.startsWith("proceso_")) return;
+      const p = JSON.parse(localStorage.getItem(k));
+      if (p.fase !== "entrega") return;
+
+      if (!procesosPorOrden[p.orden]) procesosPorOrden[p.orden] = [];
+      procesosPorOrden[p.orden].push(p);
+    });
+
+    // Renderizar cada bloque por número de orden
+    Object.keys(procesosPorOrden).forEach((orden, idx) => {
+      const blockId = `order-entrega-${idx}`;
+      const procesos = procesosPorOrden[orden];
+
+      const block = document.createElement("div");
+      block.classList.add("order-block");
+      block.innerHTML = `
+        <button class="order-header" onclick="toggleOrder('${blockId}')">
+          Número de Orden: ${orden} <span class="arrow">▼</span>
+        </button>
+        <div id="${blockId}" class="order-content hidden">
+          <table class="process-table">
+            <thead>
+              <tr>
+                <th>ISBN</th>
+                <th>Título</th>
+                <th>Destinatario</th>
+                <th>Cantidad</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${procesos.map(p => `
+                <tr data-url="detalle-entrega.html?id=${p.id}">
+                  <td>${p.isbn || "-"}</td>
+                  <td>${p.titulo}</td>
+                  <td>${p.destinatario || "-"}</td>
+                  <td>${p.cantidad || 1}</td>
+                  <td>
+                    <button class="btn" onclick="window.location.href='editar-entrega.html?id=${p.id}'">Editar</button>
+                    <button class="btn red" onclick="FLUJO.eliminar('${p.id}')">Eliminar</button>
+                  </td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+      container.appendChild(block);
+    });
+
+    // Click en fila → ir al detalle
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll("tr[data-url]").forEach(row => {
+        row.addEventListener("click", (e) => {
+          if (e.target.tagName.toLowerCase() === "button") return;
+          window.location.href = row.dataset.url;
+        });
+      });
+    });
+  </script>
 </body>
 </html>

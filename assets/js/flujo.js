@@ -23,14 +23,15 @@
     localStorage.setItem(key(proceso.id), JSON.stringify(proceso));
   }
 
-  function crear({ id, titulo, cantidad = 1, orden = "" }) {
+  function crear({ id, titulo, cantidad = 1, orden = "", fase }) {
     const proceso = {
       id: String(id),
       titulo: titulo || "Proceso sin título",
       cantidad,
       orden,
-      fase: FASES[0],
-      creadoEn: Date.now()
+      fase: fase || FASES[0], // si no pasas fase, arranca en alistamiento
+      creadoEn: Date.now(),
+      fases: {}
     };
     set(proceso);
     return proceso;
@@ -50,19 +51,28 @@
       `${detallePath(p.fase)}?id=${encodeURIComponent(p.id)}`;
   }
 
-  function avanzar(id) {
+  // 🔧 Adaptado: ahora se puede decidir si ir al detalle o al listado
+  function avanzar(id, irADetalle = true) {
     const p = get(id);
     if (!p) return alert("❌ Proceso no encontrado");
     const i = idx(p.fase);
     if (i === -1) return alert("❌ Fase inválida");
     if (i >= FASES.length - 1) {
       alert("✅ Ya estás en la última fase (Entrega).");
-      return goDetalleActual(id);
+      if (irADetalle) {
+        return goDetalleActual(id);
+      } else {
+        return window.location.href = `../${p.fase}/${p.fase}.html`;
+      }
     }
     p.fase = FASES[i + 1];
     set(p);
     alert("➡️ Avanzó a la fase: " + p.fase);
-    goDetalleActual(id);
+    if (irADetalle) {
+      goDetalleActual(id);
+    } else {
+      window.location.href = `../${p.fase}/${p.fase}.html`;
+    }
   }
 
   function retroceder(id) {
@@ -86,13 +96,34 @@
     if (!ok) return;
     localStorage.removeItem(key(id));
     alert("🗑️ Proceso eliminado.");
-    // Redirige a listado de la fase donde estabas
-    window.location.href = `../${p.fase}/${p.fase}.html`;
+
+    // Detectar página actual
+    if (window.location.pathname.includes("procesos.html")) {
+      window.location.href = "../control-procesos/procesos.html";
+    } else {
+      window.location.href = `../${p.fase}/${p.fase}.html`;
+    }
   }
 
   function readId() {
     const params = new URLSearchParams(window.location.search);
     return params.get("id");
+  }
+
+  // ✅ Guardar datos de una fase
+  function guardarFase(id, fase, datos) {
+    const p = get(id);
+    if (!p) return alert("❌ Proceso no encontrado");
+
+    if (!p.fases) p.fases = {};
+    p.fases[fase] = datos;
+
+    set(p);
+  }
+
+  // ✅ Guardar y saltar a la siguiente fase → al LISTADO
+  function goDetalleSiguiente(id) {
+    avanzar(id, false);
   }
 
   // Hidrata campos básicos si existen en el DOM
@@ -112,6 +143,28 @@
     setText("#numeroOrden", p.orden ?? "");
   }
 
+  // ✅ Finalizar proceso (última fase)
+  function finalizar(id) {
+    const p = get(id);
+    if (!p) return alert("❌ Proceso no encontrado");
+
+    // Si ya está finalizado, no repetir
+    if (p.estado === "Finalizado") {
+      alert("ℹ️ Este proceso ya está finalizado.");
+      return window.location.href = "../control-procesos/procesos.html";
+    }
+
+    // Actualizar estado y fecha
+    p.estado = "Finalizado";
+    p.fase = "finalizado"; // lo manejamos como pseudo-fase para control
+    p.fechaFinalizacion = new Date().toLocaleString("es-CO");
+
+    set(p);
+
+    alert("✅ Proceso marcado como FINALIZADO.");
+    window.location.href = "../control-procesos/procesos.html";
+  }
+
   // Exponer API
   w.FLUJO = {
     FASES,
@@ -124,5 +177,8 @@
     readId,
     goDetalleActual,
     hidratarDetalle,
+    guardarFase,
+    goDetalleSiguiente,
+    finalizar // 👈 NUEVO
   };
 })(window);

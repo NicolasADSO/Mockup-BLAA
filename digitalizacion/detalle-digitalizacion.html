@@ -53,46 +53,80 @@
     <div class="actions">
       <button class="btn" onclick="window.location.href='editar-digitalizacion.html'">Editar</button>
       <button class="btn red" onclick="FLUJO.eliminar(FLUJO.readId())">Eliminar</button>
+      <button id="guardarDigitalBtn" class="btn success">Guardar Digitalización</button>
       <button class="btn">Exportar Excel</button>
       <button class="btn">Exportar PDF</button>
     </div>
 
     <!-- INFO CARD GENERAL -->
     <div class="info-card">
-      <p><b>Título:</b><span id="titulo"> Historia de Colombia</p>
-      <p><b>ISBN:</b><span id="isbn"> 9789581234567</p>
-      <p><b>Cantidad:</b><span id="cantidad"> 3</p>
-      <p><b>Total línea:</b><span id="total"> $120,000</p>
-      <p><b>Estado:</b><span id="estado">Pendiente</p>
-      <p><b>Fase actual:</b><span id="fase"> Digitalización</p>
-      <p><b>Número de Orden:</b><span id="orden"> DIG-2025-01</p>
+      <p><b>Título:</b> <span id="titulo">Historia de Colombia</span></p>
+      <p><b>ISBN:</b> <span id="isbn">9789581234567</span></p>
+      <p><b>Cantidad:</b> <span id="cantidad">3</span></p>
+      <p><b>Total línea:</b> <span id="total">$120,000</span></p>
+      <p><b>Estado:</b> <span id="estado">Pendiente</span></p>
+      <p><b>Fase actual:</b> <span id="fase">Digitalización</span></p>
+      <p><b>Número de Orden:</b> <span id="orden">DIG-2025-01</span></p>
     </div>
 
-    <!-- FORMULARIO DE DIGITALIZACIÓN (solo lectura) -->
+    <!-- FORMULARIO DE DIGITALIZACIÓN -->
     <div class="form-section">
       <h3>📑 Información de Digitalización</h3>
-      <form>
+      <form id="formDigital">
         <div>
           <label>Archivo Digital:</label>
-          <input type="text" value="historia_colombia.pdf" readonly>
+          <input type="text" name="archivo" value="historia_colombia.pdf">
         </div>
         <div>
           <label>Formato:</label>
-          <input type="text" value="PDF" readonly>
+          <input type="text" name="formato" value="PDF">
         </div>
         <div>
           <label>Resolución (DPI):</label>
-          <input type="text" value="300" readonly>
+          <input type="text" name="resolucion" value="300">
         </div>
         <div style="grid-column: span 2;">
           <label>Observaciones:</label>
-          <textarea readonly>Escaneado en alta resolución, con corrección de color aplicada.</textarea>
+          <textarea name="observaciones">Escaneado en alta resolución, con corrección de color aplicada.</textarea>
         </div>
       </form>
     </div>
   </div>
+
+  <!-- Scripts -->
   <script src="../assets/js/eliminar.js"></script>
   <script src="../assets/js/flujo.js"></script>
-  <script>document.addEventListener('DOMContentLoaded', FLUJO.hidratarDetalle);</script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      FLUJO.hidratarDetalle();
+
+      const id = FLUJO.readId?.();
+      if (!id) return;
+
+      const form = document.getElementById("formDigital");
+      const btnGuardar = document.getElementById("guardarDigitalBtn");
+
+      if (btnGuardar && form) {
+        btnGuardar.addEventListener("click", (e) => {
+          e.preventDefault();
+
+          // Tomar los valores del formulario
+          const datos = {
+            archivo: form.querySelector("input[name='archivo']").value.trim(),
+            formato: form.querySelector("input[name='formato']").value.trim(),
+            resolucion: form.querySelector("input[name='resolucion']").value.trim(),
+            observaciones: form.querySelector("textarea[name='observaciones']").value.trim(),
+            fecha: new Date().toISOString().slice(0, 10),
+            responsable: "Digitalización (Ana Gómez)"
+          };
+
+          // Guardar los datos en la fase "digitalizacion"
+          FLUJO.guardarFase(id, "digitalizacion", datos);
+
+          alert("✅ Datos de Digitalización guardados correctamente.");
+        });
+      }
+    });
+  </script>
 </body>
 </html>
