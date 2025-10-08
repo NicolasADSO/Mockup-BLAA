@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Historial de Procesos - BlaaFlow</title>
+  <link rel="stylesheet" href="../assets/css/layout.css">
+  <link rel="stylesheet" href="../assets/css/control-procesos/procesos.css">
+  <style>
+    /* === Modal === */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal.active {
+      display: flex;
+    }
+    .modal-content {
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      position: relative;
+    }
+    .modal-content h2 {
+      margin-top: 0;
+      color: #990f0c;
+    }
+    .modal-content button {
+      background: #990f0c;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 8px 16px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      background: transparent;
+      color: #990f0c;
+      font-weight: bold;
+      font-size: 20px;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <img src="../assets/img/logo-sin-fondo.png" alt="Logo BlaaFlow">
+    <div class="search-profile">
+      <input type="text" placeholder="Buscar...">
+      <div class="profile">A</div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <ul>
+      <li><a href="../dashboard.html">Dashboard Admin</a></li>
+      <li><a href="../control-procesos/procesos.html">Control de Procesos</a></li>
+      <li><a href="./historial.html" class="active">Historial de Procesos</a></li>
+    </ul>
+  </div>
+
+  <!-- CONTENIDO -->
+  <div class="main-content">
+    <h1>Historial de Procesos Finalizados</h1>
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Título</th>
+          <th>ISBN</th>
+          <th>Proveedor</th>
+          <th>Fecha Finalización</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="tabla-historial-body"></tbody>
+    </table>
+  </div>
+
+  <!-- MODAL DETALLE -->
+  <div id="detalle-modal" class="modal">
+    <div class="modal-content">
+      <button class="close-btn">&times;</button>
+      <h2>Detalle del Proceso Finalizado</h2>
+      <div id="detalle-container"></div>
+      <button id="ver-acta">Ver Acta PDF</button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const historial = JSON.parse(localStorage.getItem('historialProcesos')) || [];
+      const tbody = document.getElementById('tabla-historial-body');
+      const modal = document.getElementById('detalle-modal');
+      const closeBtn = modal.querySelector('.close-btn');
+      const detalleContainer = document.getElementById('detalle-container');
+      const verActaBtn = document.getElementById('ver-acta');
+
+      // Llenar tabla historial
+      tbody.innerHTML = '';
+      historial.forEach(proceso => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${proceso.id}</td>
+          <td>${proceso.titulo}</td>
+          <td>${proceso.isbn}</td>
+          <td>${proceso.proveedor || 'N/A'}</td>
+          <td>${proceso.fechaFinalizacion}</td>
+          <td><button class="ver-detalle-btn" data-id="${proceso.id}">Ver Detalle</button></td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      // Abrir modal con detalles
+      tbody.addEventListener('click', (e) => {
+        if (e.target.classList.contains('ver-detalle-btn')) {
+          const id = e.target.dataset.id;
+          const proceso = historial.find(p => p.id == id);
+          if (!proceso) return;
+
+          detalleContainer.innerHTML = `
+            <p><b>ID:</b> ${proceso.id}</p>
+            <p><b>Título:</b> ${proceso.titulo}</p>
+            <p><b>ISBN:</b> ${proceso.isbn}</p>
+            <p><b>Proveedor:</b> ${proceso.proveedor || 'N/A'}</p>
+            <p><b>Fecha Finalización:</b> ${proceso.fechaFinalizacion}</p>
+            <h3>Resumen de Fases</h3>
+            <ul>
+              ${proceso.fases?.map(f => `<li>${f.nombre}: ${f.estado}</li>`).join('') || '<li>No hay fases registradas</li>'}
+            </ul>
+          `;
+
+          verActaBtn.onclick = () => generarActaPDF(proceso);
+          modal.classList.add('active');
+        }
+      });
+
+      // Cerrar modal
+      closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+      modal.addEventListener('click', e => {
+        if (e.target === modal) modal.classList.remove('active');
+      });
+    });
+
+    // Función placeholder para PDF (puedes enlazar tu generador real)
+    function generarActaPDF(proceso) {
+      alert(`Generar Acta PDF para ${proceso.titulo}`);
+    }
+  </script>
+</body>
+</html>

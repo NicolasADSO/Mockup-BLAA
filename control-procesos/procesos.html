@@ -31,6 +31,8 @@
 
       <div class="section-title"><b>Seguimiento ▿</b></div>
       <li class="active"><a href="../control-procesos/procesos.html">Control de Procesos</a></li>
+      <li><a href="../historial-procesos/historial.html">Historial de Procesos</a></li>
+
 
       <div class="section-title"><b>Configuración ▿</b></div>
       <li><a href="../configuracion/permisos.html">Permisos</a></li>
@@ -59,7 +61,7 @@
   <!-- Script de flujo general -->
   <script src="../assets/js/flujo.js"></script>
 
-  <!-- Script interno para renderizar procesos -->
+  <!-- Script interno -->
   <script>
     // === Agrupar procesos por orden ===
     function agruparPorOrden() {
@@ -90,15 +92,25 @@
       Object.keys(grupos).forEach(orden => {
         const procesos = grupos[orden];
         const orderId = "order-" + orden.replace(/\s+/g, "_");
+        const todosFinalizados = procesos.every(p => p.estado === "Finalizado");
 
         const block = document.createElement("div");
         block.classList.add("order-block");
+
         block.innerHTML = `
           <button class="order-header" onclick="toggleOrder('${orderId}')">
             Número de Orden: ${orden}
             <span class="count">(${procesos.length} procesos)</span>
             <span class="arrow">▼</span>
           </button>
+
+          ${todosFinalizados ? `
+            <div class="export-section">
+              <button class="btn btn-pdf" onclick="exportarOrden('${orden}')">📄 Exportar Acta Consolidada</button>
+              <button class="btn green" onclick="finalizarOrden('${orden}')">✅ Finalizar Orden</button>
+            </div>
+          ` : ""}
+
           <div id="${orderId}" class="order-content hidden">
             <table class="process-table">
               <thead>
@@ -116,7 +128,6 @@
                 ${procesos.map(p => {
                   const estado = p.estado || p.fase || "-";
                   let badgeClass = "badge red";
-
                   if (estado === "Finalizado") badgeClass = "badge green";
                   else if (estado === "entrega") badgeClass = "badge yellow";
 
@@ -154,9 +165,9 @@
       if (content) content.classList.toggle("hidden");
     }
 
-    // === Listener para generar Acta PDF ===
+    // === Listener para generar Acta individual ===
     document.addEventListener("click", (e) => {
-      if (e.target.classList.contains("btn-pdf")) {
+      if (e.target.classList.contains("btn-pdf") && e.target.hasAttribute("data-id")) {
         const id = e.target.getAttribute("data-id");
         const procesos = Object.keys(localStorage)
           .filter(k => k.startsWith("proceso_"))
@@ -168,7 +179,6 @@
           return;
         }
 
-        // Llamar a la función modular del acta
         if (typeof generarActaPDF === "function") {
           generarActaPDF(proceso);
         } else {
@@ -177,10 +187,73 @@
       }
     });
 
+    // === Exportar Acta Consolidada de una Orden ===
+    function exportarOrden(orden) {
+      const procesos = Object.keys(localStorage)
+        .filter(k => k.startsWith("proceso_"))
+        .map(k => JSON.parse(localStorage.getItem(k)))
+        .filter(p => p.orden === orden);
+
+      if (procesos.length === 0) {
+        alert("❌ No hay procesos para esta orden.");
+        return;
+      }
+
+      if (typeof generarActaConsolidada === "function") {
+        generarActaConsolidada(orden, procesos);
+      } else {
+        console.error("⚠️ La función generarActaConsolidada no está definida. Revisa acta-orden.js");
+      }
+    }
+
+    // === Finalizar una Orden ===
+    function finalizarOrden(orden) {
+      if (!confirm(`¿Deseas finalizar la orden ${orden}? Esta acción moverá todos sus procesos al historial.`)) {
+        return;
+      }
+
+      // 1️⃣ Obtener todos los procesos almacenados
+      const todasLasClaves = Object.keys(localStorage).filter(k => k.startsWith("proceso_"));
+      const todosProcesos = todasLasClaves.map(k => JSON.parse(localStorage.getItem(k)));
+
+      // 2️⃣ Separar los de la orden actual
+      const procesosDeOrden = todosProcesos.filter(p => p.orden === orden);
+      if (procesosDeOrden.length === 0) {
+        alert("❌ No se encontraron procesos asociados a esta orden.");
+        return;
+      }
+
+      const otrosProcesos = todosProcesos.filter(p => p.orden !== orden);
+
+      // 3️⃣ Obtener historial existente (si no hay, se crea uno vacío)
+      const historial = JSON.parse(localStorage.getItem("historial_procesos") || "[]");
+
+      // 4️⃣ Crear registro para esta orden finalizada
+      const nuevoRegistro = {
+        orden,
+        fechaFinalizacion: new Date().toLocaleDateString("es-CO"),
+        cantidadProcesos: procesosDeOrden.length,
+        procesos: procesosDeOrden
+      };
+
+      historial.push(nuevoRegistro);
+
+      // 5️⃣ Guardar historial actualizado
+      localStorage.setItem("historial_procesos", JSON.stringify(historial));
+
+      // 6️⃣ Eliminar del localStorage los procesos de esta orden
+      procesosDeOrden.forEach(p => localStorage.removeItem(`proceso_${p.id}`));
+
+      // 7️⃣ Confirmación y actualización de interfaz
+      alert(`✅ La orden ${orden} fue finalizada y movida al historial.`);
+      renderProcesos();
+    }
+
     document.addEventListener("DOMContentLoaded", renderProcesos);
   </script>
 
-  <!-- Script modular del acta PDF -->
+  <!-- Scripts modulares -->
   <script src="../assets/js/acta-pdf.js?v=5"></script>
+  <script src="../assets/js/acta-orden.js?v=1"></script>
 </body>
 </html>
