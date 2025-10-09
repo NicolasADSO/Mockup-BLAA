@@ -2,9 +2,10 @@
 // Acta Consolidada por Orden - Versión corporativa BlaaFlow
 // Requiere jsPDF y jsPDF-Autotable cargados en el HTML
 
-function generarActaConsolidada(orden, procesos) {
+function generarActaConsolidada(orden, procesos, infoExtra = {}) {
   console.log("🧾 Generando Acta Consolidada para la orden:", orden);
 
+  const { fechaFinalizacion, cantidad, totalGeneral, fuente } = infoExtra; // 🔹 NUEVO
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: "mm", format: "a4" });
 
@@ -36,17 +37,21 @@ function generarActaConsolidada(orden, procesos) {
   doc.setFontSize(12);
   doc.setTextColor(...colorGris);
   doc.text(`Número de Orden: ${orden}`, 105, 85, { align: "center" });
-  doc.text(`Total de Procesos: ${procesos.length}`, 105, 92, { align: "center" });
+
+  // 🔹 NUEVO: Mostrar datos adicionales si vienen desde historial
+  if (cantidad) doc.text(`Total de Procesos: ${cantidad}`, 105, 92, { align: "center" });
+  if (fechaFinalizacion) doc.text(`Fecha Finalización: ${fechaFinalizacion}`, 105, 99, { align: "center" });
+  if (totalGeneral) doc.text(`Valor Total Estimado: $${totalGeneral.toLocaleString("es-CO")}`, 105, 106, { align: "center" });
 
   doc.setDrawColor(160);
-  doc.line(40, 100, 170, 100);
+  doc.line(40, 112, 170, 112);
 
   doc.setFontSize(11);
   doc.text(
     "Este documento consolida los procesos completados en la orden\n" +
     "correspondiente al flujo documental gestionado a través del sistema BlaaFlow,\n" +
     "en la Biblioteca Luis Ángel Arango.",
-    105, 115, { align: "center" }
+    105, 126, { align: "center" }
   );
 
   doc.setFont("helvetica", "italic");
@@ -56,7 +61,7 @@ function generarActaConsolidada(orden, procesos) {
     month: "2-digit",
     year: "numeric",
   });
-  doc.text(`Generado automáticamente el ${fecha}`, 105, 135, { align: "center" });
+  doc.text(`Generado automáticamente el ${fecha}`, 105, 146, { align: "center" });
 
   // Logo opcional si existe variable global logoBase64
   if (typeof logoBase64 !== "undefined" && logoBase64) {
@@ -73,6 +78,14 @@ function generarActaConsolidada(orden, procesos) {
   doc.setFont("helvetica", "bold");
   doc.setFontSize(11);
   doc.text("Biblioteca Luis Ángel Arango - División de Gestión Documental", 105, 215, { align: "center" });
+
+  // 🔹 NUEVO: Texto extra si el acta viene del historial
+  if (fuente === "historial") {
+    doc.setFont("helvetica", "italic");
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text("(Documento generado desde el historial de procesos)", 105, 222, { align: "center" });
+  }
 
   doc.addPage();
 
@@ -97,9 +110,10 @@ function generarActaConsolidada(orden, procesos) {
       ["Título", proceso.titulo || "—"],
       ["ISBN", proceso.isbn || "—"],
       ["Cantidad", proceso.cantidad || "—"],
+      ["Valor", proceso.valor || "—"],
       ["Orden", proceso.orden || "—"],
-      ["Estado", proceso.estado || "—"],
-      ["Fecha Finalización", proceso.fechaFinalizacion || "—"],
+      ["Estado", proceso.estado || proceso.faseActual || "—"],
+      ["Fecha Finalización", proceso.fechaFinalizacion || fechaFinalizacion || "—"], // 🔹 NUEVO fallback
     ];
 
     gen.forEach(([k, v]) => {

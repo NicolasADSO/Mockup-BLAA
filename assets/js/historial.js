@@ -1,9 +1,20 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const cont = document.getElementById("historial-container");
   const inputBusqueda = document.getElementById("busqueda-historial");
   const modal = document.getElementById("detalle-modal");
   const detalleContainer = document.getElementById("detalle-container");
   const closeBtn = modal.querySelector(".close-btn");
+
+  // =====================================================
+  // 🔹 1️⃣ Asegurar que jsPDF esté disponible
+  // =====================================================
+  if (!window.jspdf) {
+    console.warn("⚠️ jsPDF no está cargado, intentando cargar desde CDN...");
+    await Promise.all([
+      cargarScript("https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"),
+      cargarScript("https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js")
+    ]);
+  }
 
   let historial = JSON.parse(localStorage.getItem("historial_procesos") || "[]");
 
@@ -23,7 +34,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderHistorial(lista, busqueda = "") {
     cont.innerHTML = "";
     lista.forEach(item => {
-      // Contenido de los procesos con resaltado
       const listaProcesos = item.procesos?.map(p => `
         <li><b>${resaltarTexto(p.titulo || '', busqueda)}</b> 
         (ISBN: ${resaltarTexto(p.isbn || '', busqueda)}) - 
@@ -99,16 +109,56 @@ document.addEventListener("DOMContentLoaded", () => {
   modal.addEventListener("click", e => { if (e.target === modal) modal.classList.remove("active"); });
 });
 
+// =====================================================
+// 🔧 Función auxiliar para cargar scripts dinámicamente
+// =====================================================
+function cargarScript(src) {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = src;
+    script.onload = resolve;
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+}
+
+// =====================================================
+// 📄 Exportar acta consolidada
+// =====================================================
 function exportarHistorial(orden) {
   const historial = JSON.parse(localStorage.getItem("historial_procesos") || "[]");
   const item = historial.find(h => h.orden === orden);
-  if (item && typeof generarActaConsolidada === "function") {
-    generarActaConsolidada(orden, item.procesos);
+
+  if (!item) {
+    alert("❌ No se encontró la información para esta orden.");
+    return;
+  }
+
+  // Calcular total general si existe campo "valor"
+  let totalGeneral = 0;
+  item.procesos.forEach(p => {
+    if (p.valor) {
+      const num = parseFloat(String(p.valor).replace(/[^0-9.]/g, ""));
+      if (!isNaN(num)) totalGeneral += num;
+    }
+  });
+
+  // 🧾 Llamar al generador de PDF con datos adicionales
+  if (typeof generarActaConsolidada === "function") {
+    generarActaConsolidada(item.orden, item.procesos, {
+      fechaFinalizacion: item.fechaFinalizacion,
+      cantidad: item.cantidadProcesos,
+      totalGeneral: totalGeneral,
+      fuente: "historial"
+    });
   } else {
-    alert("No se encontró el acta consolidada para esta orden.");
+    alert("⚠️ No se encontró la función generarActaConsolidada. Revisa acta-orden.js");
   }
 }
 
+// =====================================================
+// 🗑️ Eliminar orden del historial
+// =====================================================
 function eliminarHistorial(orden) {
   if (!confirm(`¿Eliminar el registro histórico de la orden ${orden}?`)) return;
   let historial = JSON.parse(localStorage.getItem("historial_procesos") || "[]");

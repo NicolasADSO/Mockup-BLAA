@@ -207,47 +207,47 @@
     }
 
     // === Finalizar una Orden ===
-    function finalizarOrden(orden) {
-      if (!confirm(`¿Deseas finalizar la orden ${orden}? Esta acción moverá todos sus procesos al historial.`)) {
-        return;
-      }
-
-      // 1️⃣ Obtener todos los procesos almacenados
-      const todasLasClaves = Object.keys(localStorage).filter(k => k.startsWith("proceso_"));
-      const todosProcesos = todasLasClaves.map(k => JSON.parse(localStorage.getItem(k)));
-
-      // 2️⃣ Separar los de la orden actual
-      const procesosDeOrden = todosProcesos.filter(p => p.orden === orden);
-      if (procesosDeOrden.length === 0) {
-        alert("❌ No se encontraron procesos asociados a esta orden.");
-        return;
-      }
-
-      const otrosProcesos = todosProcesos.filter(p => p.orden !== orden);
-
-      // 3️⃣ Obtener historial existente (si no hay, se crea uno vacío)
-      const historial = JSON.parse(localStorage.getItem("historial_procesos") || "[]");
-
-      // 4️⃣ Crear registro para esta orden finalizada
-      const nuevoRegistro = {
-        orden,
-        fechaFinalizacion: new Date().toLocaleDateString("es-CO"),
-        cantidadProcesos: procesosDeOrden.length,
-        procesos: procesosDeOrden
-      };
-
-      historial.push(nuevoRegistro);
-
-      // 5️⃣ Guardar historial actualizado
-      localStorage.setItem("historial_procesos", JSON.stringify(historial));
-
-      // 6️⃣ Eliminar del localStorage los procesos de esta orden
-      procesosDeOrden.forEach(p => localStorage.removeItem(`proceso_${p.id}`));
-
-      // 7️⃣ Confirmación y actualización de interfaz
-      alert(`✅ La orden ${orden} fue finalizada y movida al historial.`);
-      renderProcesos();
+  function finalizarOrden(orden) {
+    if (!confirm(`¿Deseas finalizar la orden ${orden}? Esta acción moverá todos sus procesos al historial.`)) {
+      return;
     }
+
+    // 1️⃣ Obtener todos los procesos almacenados
+    const todasLasClaves = Object.keys(localStorage).filter(k => k.startsWith("proceso_"));
+    const todosProcesos = todasLasClaves.map(k => JSON.parse(localStorage.getItem(k)));
+
+    // 2️⃣ Separar los de la orden actual
+    const procesosDeOrden = todosProcesos.filter(p => p.orden === orden);
+    if (procesosDeOrden.length === 0) {
+      alert("❌ No se encontraron procesos asociados a esta orden.");
+      return;
+    }
+
+    const otrosProcesos = todosProcesos.filter(p => p.orden !== orden);
+
+    // 3️⃣ Obtener historial existente (si no hay, se crea uno vacío)
+    const historial = JSON.parse(localStorage.getItem("historial_procesos") || "[]");
+
+    // 4️⃣ Crear registro para esta orden finalizada
+    const nuevoRegistro = {
+      orden,
+      fechaFinalizacion: new Date().toLocaleDateString("es-CO"),
+      cantidadProcesos: procesosDeOrden.length,
+      procesos: procesosDeOrden
+    };
+
+    historial.push(nuevoRegistro);
+
+    // 5️⃣ Guardar historial actualizado
+    localStorage.setItem("historial_procesos", JSON.stringify(historial));
+
+    // 6️⃣ Eliminar del localStorage los procesos de esta orden
+    procesosDeOrden.forEach(p => localStorage.removeItem(`proceso_${p.id}`));
+
+    // 7️⃣ Confirmación y actualización de interfaz
+    alert(`✅ La orden ${orden} fue finalizada y movida al historial.`);
+    renderProcesos();
+  }
 
     document.addEventListener("DOMContentLoaded", renderProcesos);
   </script>
