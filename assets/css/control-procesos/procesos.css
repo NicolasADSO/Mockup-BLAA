@@ -221,3 +221,101 @@
 .btn-pdf:hover {
   background: #555;
 }
+/* ================================
+   ⏱ ESTILOS DE TIME TRACKING
+================================ */
+.process-table td {
+  vertical-align: middle;
+}
+
+.time-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 120px;
+}
+
+.time-display {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: #222;
+  background: #f3f3f3;
+  border-radius: 8px;
+  padding: 4px 10px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.time-btns {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.time-btns button {
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  padding: 5px 8px;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.time-btns button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+.btn-start { background: #1e88e5; }
+.btn-pause { background: #fbc02d; color: #222; }
+.btn-save  { background: #43a047; }
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  border-radius: 10px;
+  background-color: #e0e0e0;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.progress-inner {
+  height: 100%;
+  background-color: #990f0c;
+  width: 0%;
+  transition: width 0.5s ease-in-out;
+}
+/* === Resumen de Tiempos Acumulados === */
+.time-summary {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+.time-summary h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #333;
+  font-weight: 600;
+}
+.summary-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.summary-table th,
+.summary-table td {
+  border: 1px solid #ddd;
+  padding: 6px 10px;
+  text-align: center;
+}
+.summary-table th {
+  background: #eee;
+  font-weight: bold;
+}
+

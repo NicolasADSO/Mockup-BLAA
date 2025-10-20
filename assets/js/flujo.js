@@ -118,6 +118,7 @@
     if (!p.fases) p.fases = {};
     p.fases[fase] = datos;
 
+    p.fase = fase;
     set(p);
   }
 

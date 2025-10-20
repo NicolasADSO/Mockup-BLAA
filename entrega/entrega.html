@@ -6,6 +6,53 @@
   <link rel="stylesheet" href="../assets/css/layout.css">
   <link rel="stylesheet" href="../assets/css/detalle.css">
   <link rel="stylesheet" href="../assets/css/entrega/entrega.css">
+
+  <style>
+    /* === ESTILOS ADAPTADOS PARA CONTROL DE TIEMPO === */
+    .time-cell {
+      text-align: center;
+      min-width: 150px;
+    }
+    .time-display {
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #333;
+    }
+    .time-btns {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+    }
+    .time-btns button {
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      padding: 4px 6px;
+      font-size: 13px;
+      transition: 0.2s;
+    }
+    .btn-start { background: #009900; color: #fff; }
+    .btn-start:hover { background: #00b300; }
+    .btn-pause { background: #ffbf00; color: #fff; }
+    .btn-pause:hover { background: #ffcc33; }
+    .btn-save { background: #007bff; color: #fff; }
+    .btn-save:hover { background: #3399ff; }
+
+    .progress-bar {
+      height: 4px;
+      width: 100%;
+      background: #eee;
+      border-radius: 3px;
+      margin-top: 5px;
+      overflow: hidden;
+    }
+    .progress-inner {
+      height: 100%;
+      width: 0%;
+      background: #28a745;
+      transition: width 1s linear;
+    }
+  </style>
 </head>
 <body>
   <!-- NAVBAR -->
@@ -25,9 +72,7 @@
       <div class="section-title"><b>Fases Especializadas ▿</b></div>
       <li><a href="../empaste/empaste.html">Encuadernación / Empaste</a></li>
       <li><a href="../catalogacion/catalogacion.html">Catalogaciones</a></li>
-      <li class="active">
-        <a href="../entrega/entrega.html">Entrega Final</a>
-      </li>
+      <li class="active"><a href="../entrega/entrega.html">Entrega Final</a></li>
       <li><a href="../digitalizacion/digitalizacion.html">Digitalización</a></li>
       <li><a href="../calidad/calidad.html">Control de Calidad</a></li>
       <li><a href="../terminado/terminado.html">Terminado Final</a></li>
@@ -35,9 +80,9 @@
 
       <div class="section-title"><b>Seguimiento ▿</b></div>
       <li><a href="../control-procesos/procesos.html">Control de Procesos</a></li>
-      <li><a href="../historial-procesos/historial.html">Historial de Procesos</a></li>
-
-
+      <li><a href="../historial-procesos/historial-proceso.html">Historial de Procesos</a></li>
+      <li><a href="../historial-tiempo.html">Historial de Tiempos</a></li>
+      
       <div class="section-title"><b>Configuración ▿</b></div>
       <li><a href="../configuracion/permisos.html">Permisos</a></li>
       <li><a href="../configuracion/fases.html">Fases del Proceso</a></li>
@@ -61,11 +106,12 @@
 
   <!-- Scripts -->
   <script src="../assets/js/flujo.js"></script>
+  <script src="../assets/js/time-tracking.js"></script>
+
   <script>
     function toggleOrder(id) {
       const elem = document.getElementById(id);
-      if (!elem) return;
-      elem.classList.toggle("hidden");
+      if (elem) elem.classList.toggle("hidden");
     }
 
     const container = document.getElementById("ordenes-container");
@@ -100,6 +146,7 @@
                 <th>Título</th>
                 <th>Destinatario</th>
                 <th>Cantidad</th>
+                <th>Tiempo</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -110,6 +157,16 @@
                   <td>${p.titulo}</td>
                   <td>${p.destinatario || "-"}</td>
                   <td>${p.cantidad || 1}</td>
+                  <td class="time-cell">
+                    <div class="time-display" id="tt-time-${p.id}">${TT.getDisplay(p.id)}</div>
+                    <small class="time-info"> Sesiones: ${TT.getSessionsCount(p.id)}</small>
+                    <div class="time-btns">
+                      <button class="btn-start" data-tt="start" data-id="${p.id}" data-fase="entrega">▶</button>
+                      <button class="btn-pause" data-tt="pause" data-id="${p.id}">⏸</button>
+                      <button class="btn-save" data-tt="save" data-id="${p.id}">💾</button>
+                    </div>
+                    <div class="progress-bar"><div id="progress-${p.id}" class="progress-inner"></div></div>
+                  </td>
                   <td>
                     <button class="btn" onclick="window.location.href='editar-entrega.html?id=${p.id}'">Editar</button>
                     <button class="btn red" onclick="FLUJO.eliminar('${p.id}')">Eliminar</button>
@@ -131,6 +188,27 @@
           window.location.href = row.dataset.url;
         });
       });
+      TT.initTicker();
+    });
+
+    // === Listener de botones de tiempo ===
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest("button");
+      if (!btn) return;
+      const action = btn.dataset.tt;
+      if (!action) return;
+
+      const id = btn.dataset.id;
+      const fase = btn.dataset.fase;
+      const user = "Admin A";
+
+      if (action === "start") TT.start(id, fase, user);
+      if (action === "pause") TT.pause(id);
+      if (action === "save") {
+        TT.saveLog(id);
+        detenerTiempo(id);
+        alert("⏱ Tiempo guardado correctamente.");
+      }
     });
   </script>
 </body>

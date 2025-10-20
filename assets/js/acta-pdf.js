@@ -1,13 +1,12 @@
 // assets/js/acta-pdf.js
-// Acta Final de Proceso con diseño visual y bloque de firmas
+// Acta Final de Proceso con resumen de tiempos
 // Requiere jsPDF cargado (jspdf.umd.min.js)
 
 function generarActaPDF(proceso) {
-  console.log("✅ acta-pdf.js versión visual con firmas cargada");
+  console.log("✅ Generando acta PDF con tiempos...");
 
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: "mm", format: "a4" });
-
   let y = 20;
 
   // === ENCABEZADO ===
@@ -96,7 +95,7 @@ function generarActaPDF(proceso) {
         doc.text(texto, 25, y);
         y += 6;
 
-        if (y > 250) { // antes del pie
+        if (y > 250) {
           doc.addPage();
           y = 20;
         }
@@ -107,6 +106,59 @@ function generarActaPDF(proceso) {
       doc.line(20, y, 190, y);
       y += 6;
     }
+  }
+
+  // === BLOQUE DE TIEMPOS ===
+  y += 10;
+  if (y > 230) {
+    doc.addPage();
+    y = 30;
+  }
+
+  const tracking = JSON.parse(localStorage.getItem("timeTracking")) || {};
+  const registro = tracking[proceso.id];
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(13);
+  doc.setTextColor(153, 15, 12);
+  doc.text("RESUMEN DE TIEMPOS", 20, y);
+  y += 8;
+
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(10);
+
+  if (!registro || !registro.sesiones || registro.sesiones.length === 0) {
+    doc.text("No hay registros de tiempo para este proceso.", 25, y);
+    y += 8;
+  } else {
+    const tiemposPorFase = registro.sesiones.reduce((acc, s) => {
+      const fase = s.fase || "Sin fase";
+      acc[fase] = (acc[fase] || 0) + (s.segundos || 0);
+      return acc;
+    }, {});
+
+    let totalSegundos = 0;
+    Object.entries(tiemposPorFase).forEach(([fase, seg]) => {
+      const h = Math.floor(seg / 3600);
+      const m = Math.floor((seg % 3600) / 60);
+      const s = seg % 60;
+      totalSegundos += seg;
+
+      doc.text(`Fase ${fase}: ${h}h ${m}m ${s}s`, 25, y);
+      y += 6;
+      if (y > 260) {
+        doc.addPage();
+        y = 25;
+      }
+    });
+
+    const hT = Math.floor(totalSegundos / 3600);
+    const mT = Math.floor((totalSegundos % 3600) / 60);
+    const sT = totalSegundos % 60;
+    y += 4;
+    doc.setFont("helvetica", "bold");
+    doc.text(`Tiempo Total del Proceso: ${hT}h ${mT}m ${sT}s`, 25, y);
+    y += 8;
   }
 
   // === PIE Y BLOQUE DE FIRMAS ===

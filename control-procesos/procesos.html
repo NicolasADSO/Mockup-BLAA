@@ -5,6 +5,52 @@
   <title>Procesos - BlaaFlow</title>
   <link rel="stylesheet" href="../assets/css/layout.css">
   <link rel="stylesheet" href="../assets/css/control-procesos/procesos.css">
+  <style>
+
+    /* === SCROLL HORIZONTAL PARA TABLAS GRANDES === */
+    .table-scroll {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .table-scroll::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .table-scroll::-webkit-scrollbar-thumb {
+      background-color: rgba(0,0,0,0.3);
+      border-radius: 4px;
+    }
+    .table-scroll::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+
+    .process-table {
+      min-width: 1000px; /* asegúrate de que no se aplaste */
+      border-collapse: collapse;
+    }
+
+    .process-table th, 
+    .process-table td {
+      white-space: nowrap; /* evita que las celdas salten de línea */
+    }
+
+
+    .time-display {
+      font-weight: 600;
+      color: #222;
+      text-align: center;
+    }
+    .time-cell {
+      text-align: center;
+      min-width: 130px;
+    }
+    .time-detail {
+      font-size: 12px;
+      color: #666;
+    }
+  </style>
 </head>
 <body>
   <!-- NAVBAR -->
@@ -20,6 +66,7 @@
   <div class="sidebar">
     <ul>
       <li><a href="../dashboard.html">Dashboard Admin</a></li>
+
       <div class="section-title"><b>Fases Especializadas ▿</b></div>
       <li><a href="../empaste/empaste.html">Encuadernación / Empaste</a></li>
       <li><a href="../catalogacion/catalogacion.html">Catalogaciones</a></li>
@@ -31,8 +78,8 @@
 
       <div class="section-title"><b>Seguimiento ▿</b></div>
       <li class="active"><a href="../control-procesos/procesos.html">Control de Procesos</a></li>
-      <li><a href="../historial-procesos/historial.html">Historial de Procesos</a></li>
-
+      <li><a href="../historial-procesos/historial-proceso.html">Historial de Procesos</a></li>
+      <li><a href="../historial-tiempo.html">Historial de Tiempo</a></li>
 
       <div class="section-title"><b>Configuración ▿</b></div>
       <li><a href="../configuracion/permisos.html">Permisos</a></li>
@@ -54,14 +101,8 @@
     <div id="orders-container"></div>
   </div>
 
-  <!-- Librerías necesarias -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+  
 
-  <!-- Script de flujo general -->
-  <script src="../assets/js/flujo.js"></script>
-
-  <!-- Script interno -->
   <script>
     // === Agrupar procesos por orden ===
     function agruparPorOrden() {
@@ -72,7 +113,6 @@
           procesos.push(JSON.parse(localStorage.getItem(key)));
         }
       }
-
       const grupos = {};
       procesos.forEach(p => {
         const orden = p.orden || "Sin Orden";
@@ -80,6 +120,17 @@
         grupos[orden].push(p);
       });
       return grupos;
+    }
+
+    // === Obtener tiempo acumulado desde localStorage.timeTracking ===
+    function getTiempoAcumulado(id) {
+      const tracking = JSON.parse(localStorage.getItem("timeTracking")) || {};
+      const registro = tracking[id];
+      const segundos = registro ? registro.totalSegundos || 0 : 0;
+      const horas = Math.floor(segundos / 3600);
+      const minutos = Math.floor((segundos % 3600) / 60);
+      const secs = segundos % 60;
+      return `${horas}h ${minutos}m ${secs}s`;
     }
 
     // === Renderizar tabla de procesos ===
@@ -112,6 +163,7 @@
           ` : ""}
 
           <div id="${orderId}" class="order-content hidden">
+            <div class="table-scroll">
             <table class="process-table">
               <thead>
                 <tr>
@@ -120,6 +172,7 @@
                   <th>Cantidad</th>
                   <th>Valor</th>
                   <th>Estado / Fase</th>
+                  <th>Tiempo Acumulado</th>
                   <th>Fecha Finalización</th>
                   <th>Acciones</th>
                 </tr>
@@ -131,6 +184,8 @@
                   if (estado === "Finalizado") badgeClass = "badge green";
                   else if (estado === "entrega") badgeClass = "badge yellow";
 
+                  const tiempoTotal = getTiempoAcumulado(p.id);
+
                   return `
                     <tr>
                       <td>${p.titulo || "—"}</td>
@@ -138,6 +193,10 @@
                       <td>${p.cantidad || 1}</td>
                       <td>${p.valor || "-"}</td>
                       <td><span class="${badgeClass}">${estado}</span></td>
+                      <td class="time-cell">
+                        <div class="time-display">${tiempoTotal}</div>
+                        <div class="time-detail">(${(JSON.parse(localStorage.getItem("timeTracking"))?.[p.id]?.sesiones?.length || 0)} sesiones)</div>
+                      </td>
                       <td>${p.fechaFinalizacion || "-"}</td>
                       <td>
                         ${p.estado === "Finalizado"
@@ -153,6 +212,7 @@
                 }).join("")}
               </tbody>
             </table>
+            </div>
           </div>
         `;
         container.appendChild(block);
@@ -164,28 +224,6 @@
       const content = document.getElementById(id);
       if (content) content.classList.toggle("hidden");
     }
-
-    // === Listener para generar Acta individual ===
-    document.addEventListener("click", (e) => {
-      if (e.target.classList.contains("btn-pdf") && e.target.hasAttribute("data-id")) {
-        const id = e.target.getAttribute("data-id");
-        const procesos = Object.keys(localStorage)
-          .filter(k => k.startsWith("proceso_"))
-          .map(k => JSON.parse(localStorage.getItem(k)));
-        const proceso = procesos.find(p => p.id === id);
-
-        if (!proceso) {
-          alert("❌ No se encontró el proceso para generar el PDF.");
-          return;
-        }
-
-        if (typeof generarActaPDF === "function") {
-          generarActaPDF(proceso);
-        } else {
-          console.error("⚠️ La función generarActaPDF no está definida. Revisa acta-pdf.js");
-        }
-      }
-    });
 
     // === Exportar Acta Consolidada de una Orden ===
     function exportarOrden(orden) {
@@ -201,56 +239,70 @@
 
       if (typeof generarActaConsolidada === "function") {
         generarActaConsolidada(orden, procesos);
-      } else {
-        console.error("⚠️ La función generarActaConsolidada no está definida. Revisa acta-orden.js");
       }
     }
 
     // === Finalizar una Orden ===
-  function finalizarOrden(orden) {
-    if (!confirm(`¿Deseas finalizar la orden ${orden}? Esta acción moverá todos sus procesos al historial.`)) {
-      return;
+    function finalizarOrden(orden) {
+      if (!confirm(`¿Deseas finalizar la orden ${orden}? Esta acción moverá todos sus procesos al historial.`)) return;
+
+      const todasLasClaves = Object.keys(localStorage).filter(k => k.startsWith("proceso_"));
+      const todosProcesos = todasLasClaves.map(k => JSON.parse(localStorage.getItem(k)));
+
+      const procesosDeOrden = todosProcesos.filter(p => p.orden === orden);
+      const historial = JSON.parse(localStorage.getItem("historial_procesos") || "[]");
+
+      const nuevoRegistro = {
+        orden,
+        fechaFinalizacion: new Date().toLocaleDateString("es-CO"),
+        cantidadProcesos: procesosDeOrden.length,
+        procesos: procesosDeOrden
+      };
+
+      historial.push(nuevoRegistro);
+      localStorage.setItem("historial_procesos", JSON.stringify(historial));
+
+      procesosDeOrden.forEach(p => {
+        TT.saveLog(p.id);
+        TT.remove(p.id);
+        localStorage.removeItem(`proceso_${p.id}`);
+      });
+
+      alert(`✅ La orden ${orden} fue finalizada y movida al historial.`);
+      renderProcesos();
     }
 
-    // 1️⃣ Obtener todos los procesos almacenados
-    const todasLasClaves = Object.keys(localStorage).filter(k => k.startsWith("proceso_"));
-    const todosProcesos = todasLasClaves.map(k => JSON.parse(localStorage.getItem(k)));
+    document.addEventListener("DOMContentLoaded", () => {
+      renderProcesos();
+    });
 
-    // 2️⃣ Separar los de la orden actual
-    const procesosDeOrden = todosProcesos.filter(p => p.orden === orden);
-    if (procesosDeOrden.length === 0) {
-      alert("❌ No se encontraron procesos asociados a esta orden.");
-      return;
-    }
+    // === Eventos para generar Acta PDF individual ===
+    document.addEventListener("click", (e) => {
+      if (e.target.classList.contains("btn-pdf") && e.target.dataset.id) {
+        const id = e.target.dataset.id;
+        const proceso = JSON.parse(localStorage.getItem(`proceso_${id}`));
 
-    const otrosProcesos = todosProcesos.filter(p => p.orden !== orden);
+        if (!proceso) {
+          alert("❌ No se encontró información del proceso.");
+          return;
+        }
 
-    // 3️⃣ Obtener historial existente (si no hay, se crea uno vacío)
-    const historial = JSON.parse(localStorage.getItem("historial_procesos") || "[]");
-
-    // 4️⃣ Crear registro para esta orden finalizada
-    const nuevoRegistro = {
-      orden,
-      fechaFinalizacion: new Date().toLocaleDateString("es-CO"),
-      cantidadProcesos: procesosDeOrden.length,
-      procesos: procesosDeOrden
-    };
-
-    historial.push(nuevoRegistro);
-
-    // 5️⃣ Guardar historial actualizado
-    localStorage.setItem("historial_procesos", JSON.stringify(historial));
-
-    // 6️⃣ Eliminar del localStorage los procesos de esta orden
-    procesosDeOrden.forEach(p => localStorage.removeItem(`proceso_${p.id}`));
-
-    // 7️⃣ Confirmación y actualización de interfaz
-    alert(`✅ La orden ${orden} fue finalizada y movida al historial.`);
-    renderProcesos();
-  }
-
-    document.addEventListener("DOMContentLoaded", renderProcesos);
+        if (typeof generarActaPDF === "function") {
+          generarActaPDF(proceso);
+        } else {
+          alert("⚠️ La función generarActaPDF no está disponible.");
+        }
+      }
+    });
   </script>
+
+  <!-- Librerías necesarias -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+  <!-- Scripts principales -->
+  <script src="../assets/js/flujo.js"></script>
+  <script src="../assets/js/time-tracking.js?v=1"></script>
 
   <!-- Scripts modulares -->
   <script src="../assets/js/acta-pdf.js?v=5"></script>

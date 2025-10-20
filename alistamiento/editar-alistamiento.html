@@ -32,9 +32,9 @@
 
       <div class="section-title"><b>Seguimiento ▿</b></div>
       <li><a href="../control-procesos/procesos.html">Control de Procesos</a></li>
-      <li><a href="../historial-procesos/historial.html">Historial de Procesos</a></li>
-
-
+      <li><a href="../historial-procesos/historial-proceso.html">Historial de Procesos</a></li>
+      <li><a href="../historial-tiempo.html">Historial de Tiempos</a></li>
+      
       <div class="section-title"><b>Configuración ▿</b></div>
       <li><a href="../configuracion/permisos.html">Permisos</a></li>
       <li><a href="../configuracion/fases.html">Fases del Proceso</a></li>
@@ -66,7 +66,7 @@
 
         <div class="form-footer two-cols">
           <a href="../alistamiento/alistamiento.html" class="btn ghost">Volver al listado</a>
-          <button type="submit" class="btn">Guardar Cambios</button>
+          <button type="submit" class="btn" id="guardarBtn">Guardar Cambios</button>
         </div>
       </form>
     </div>
@@ -74,21 +74,52 @@
 
   <!-- Scripts -->
   <script src="../assets/js/flujo.js"></script>
+  <script src="../assets/js/time-tracking.js?v=1"></script>
+
   <script>
-    document.getElementById('form-alistamiento').addEventListener('submit', function(e) {
-      e.preventDefault();
-
+    document.addEventListener("DOMContentLoaded", () => {
       const id = FLUJO.readId();
-      const datos = {
-        materiales: this.materiales.value,
-        fecha_inicio: this.fecha_inicio.value,
-      };
+      const proceso = JSON.parse(localStorage.getItem(`proceso_${id}`));
+      if (!id || !proceso) return;
 
-      // Guardamos la fase actual
-      FLUJO.guardarFase(id, 'alistamiento', datos);
+      const user = "Admin A"; // reemplazar con usuario actual del sistema
+      const faseActual = "alistamiento"; // siempre se fija la fase actual
 
-      // Avanzamos a la siguiente fase
-      FLUJO.goDetalleSiguiente(id);
+      // === 🔹 INICIAR AUTOMÁTICAMENTE EL TIEMPO ===
+      TT.start(id, faseActual, user);
+      console.log("⏱️ Contador iniciado automáticamente para", faseActual);
+
+      // === 🔹 GUARDAR TIEMPO AUTOMÁTICO AL SALIR O RECARGAR ===
+      window.addEventListener("beforeunload", () => {
+        const map = JSON.parse(localStorage.getItem("time_tracking") || "{}");
+        const st = map[id];
+        if (st && st.running) {
+          TT.pause(id);
+          TT.saveLog(id);
+          console.log("💾 Tiempo guardado automáticamente antes de salir.");
+        }
+      });
+
+      // === 🔹 GUARDAR FORMULARIO MANUALMENTE ===
+      const form = document.getElementById("form-alistamiento");
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        // Pausa y guarda definitivamente el tiempo de esta fase
+        TT.pause(id);
+        TT.saveLog(id);
+
+        const datos = {
+          materiales: this.materiales.value,
+          fecha_inicio: this.fecha_inicio.value,
+        };
+
+        // Guardar datos en la fase actual
+        FLUJO.guardarFase(id, faseActual, datos);
+
+        // Avanzar a la siguiente fase (detalle o listado)
+        FLUJO.goDetalleSiguiente(id);
+      });
     });
   </script>
 </body>

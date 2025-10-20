@@ -29,13 +29,12 @@
       <li><a href="../digitalizacion/digitalizacion.html">Digitalización</a></li>
       <li><a href="../calidad/calidad.html">Control de Calidad</a></li>
       <li><a href="../terminado/terminado.html">Terminado Final</a></li>
-      <li class="active">
-        <a href="../alistamiento/alistamiento.html" >Alistamiento</a>
-      </li>
+      <li class="active"><a href="../alistamiento/alistamiento.html">Alistamiento</a></li>
 
       <div class="section-title"><b>Seguimiento ▿</b></div>
       <li><a href="../control-procesos/procesos.html">Control de Procesos</a></li>
-      <li><a href="../historial-procesos/historial.html">Historial de Procesos</a></li>
+      <li><a href="../historial-procesos/historial-proceso.html">Historial de Procesos</a></li>
+      <li><a href="../historial-tiempo.html">Historial de Tiempos</a></li>
 
       <div class="section-title"><b>Configuración ▿</b></div>
       <li><a href="../configuracion/permisos.html">Permisos</a></li>
@@ -51,77 +50,86 @@
   <!-- CONTENIDO -->
   <div class="content">
     <div class="header">
-      <h2>📑 Alistamiento</h2>
+      <h2>📦 Alistamiento</h2>
     </div>
-
-    <!-- Contenedor dinámico -->
     <div id="ordenes-container"></div>
   </div>
 
   <!-- Scripts -->
   <script src="../assets/js/flujo.js"></script>
+  <script src="../assets/js/time-tracking.js"></script>
+
   <script>
-    function toggleOrder(id) {
-      const elem = document.getElementById(id);
-      if (!elem) return;
-      elem.classList.toggle("hidden");
-    }
-
-    const container = document.getElementById("ordenes-container");
-    const procesosPorOrden = {};
-
-    // Agrupamos los procesos en fase "alistamiento" por número de orden
-    Object.keys(localStorage).forEach(k => {
-      if (!k.startsWith("proceso_")) return;
-      const p = JSON.parse(localStorage.getItem(k));
-      if (p.fase !== "alistamiento") return;
-
-      if (!procesosPorOrden[p.orden]) procesosPorOrden[p.orden] = [];
-      procesosPorOrden[p.orden].push(p);
-    });
-
-    // Renderizamos cada bloque de orden
-    Object.keys(procesosPorOrden).forEach((orden, idx) => {
-      const blockId = `order-alist-${idx}`;
-      const procesos = procesosPorOrden[orden];
-
-      const block = document.createElement("div");
-      block.classList.add("order-block");
-      block.innerHTML = `
-        <button class="order-header" onclick="toggleOrder('${blockId}')">
-          Número de Orden: ${orden} <span class="arrow">▼</span>
-        </button>
-        <div id="${blockId}" class="order-content hidden">
-          <table class="process-table">
-            <thead>
-              <tr>
-                <th>ISBN</th>
-                <th>Título</th>
-                <th>Cantidad</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${procesos.map(p => `
-                <tr data-url="detalle-alistamiento.html?id=${p.id}">
-                  <td>${p.isbn || "-"}</td>
-                  <td>${p.titulo}</td>
-                  <td>${p.cantidad || 1}</td>
-                  <td>
-                    <button class="btn" onclick="window.location.href='editar-alistamiento.html?id=${p.id}'">Editar</button>
-                    <button class="btn red" onclick="FLUJO.eliminar('${p.id}')">Eliminar</button>
-                  </td>
-                </tr>
-              `).join("")}
-            </tbody>
-          </table>
-        </div>
-      `;
-      container.appendChild(block);
-    });
-
-    // Click en fila → ir al detalle
     document.addEventListener("DOMContentLoaded", () => {
+      const container = document.getElementById("ordenes-container");
+      const procesosPorOrden = {};
+
+      // === 1️⃣ Agrupar procesos por orden (solo fase Alistamiento)
+      Object.keys(localStorage).forEach(k => {
+        if (!k.startsWith("proceso_")) return;
+        const p = JSON.parse(localStorage.getItem(k));
+        const fase = (p.fase || p.estado || "").toLowerCase();
+        if (fase !== "alistamiento") return;
+
+        if (!procesosPorOrden[p.orden]) procesosPorOrden[p.orden] = [];
+        procesosPorOrden[p.orden].push(p);
+      });
+
+      // === 2️⃣ Si no hay procesos en esta fase
+      if (Object.keys(procesosPorOrden).length === 0) {
+        container.innerHTML = `<p style="text-align:center; color:#777;">No hay procesos en fase de Alistamiento.</p>`;
+        return;
+      }
+
+      // === 3️⃣ Renderizar bloques por orden
+      Object.keys(procesosPorOrden).forEach((orden, idx) => {
+        const blockId = `order-alist-${idx}`;
+        const procesos = procesosPorOrden[orden];
+
+        const block = document.createElement("div");
+        block.classList.add("order-block");
+        block.innerHTML = `
+          <button class="order-header" onclick="toggleOrder('${blockId}')">
+            Número de Orden: ${orden} <span class="arrow">▼</span>
+          </button>
+          <div id="${blockId}" class="order-content hidden">
+            <table class="process-table">
+              <thead>
+                <tr>
+                  <th>ISBN</th>
+                  <th>Título</th>
+                  <th>Cantidad</th>
+                  <th>Tiempo Acumulado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${procesos.map(p => `
+                  <tr data-url="detalle-alistamiento.html?id=${p.id}">
+                    <td>${p.isbn || "-"}</td>
+                    <td>${p.titulo}</td>
+                    <td>${p.cantidad || 1}</td>
+                    <td class="time-cell">
+                      <div class="time-display" id="tt-time-${p.id}">${TT.getTotalDisplay(p.id)}</div>
+                      <small class="time-info">Sesiones: ${TT.getSessionsCount(p.id)}</small>
+                    </td>
+                    <td>
+                      <button class="btn" onclick="window.location.href='editar-alistamiento.html?id=${p.id}'">Editar</button>
+                      <button class="btn red" onclick="FLUJO.eliminar('${p.id}')">Eliminar</button>
+                    </td>
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+          </div>
+        `;
+        container.appendChild(block);
+      });
+
+      // === 4️⃣ Actualización automática del tiempo acumulado
+      TT.initTicker();
+
+      // === 5️⃣ Click en fila → ir al detalle (excepto botones)
       document.querySelectorAll("tr[data-url]").forEach(row => {
         row.addEventListener("click", (e) => {
           if (e.target.tagName.toLowerCase() === "button") return;
@@ -129,6 +137,12 @@
         });
       });
     });
+
+    // === Función para abrir/cerrar secciones de órdenes
+    function toggleOrder(id) {
+      const elem = document.getElementById(id);
+      if (elem) elem.classList.toggle("hidden");
+    }
   </script>
 </body>
 </html>

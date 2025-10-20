@@ -2,62 +2,16 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Terminado Final - BlaaFlow</title>
-  <link rel="stylesheet" href="../assets/css/layout.css">
-  <link rel="stylesheet" href="../assets/css/detalle.css">
-  <link rel="stylesheet" href="../assets/css/terminado/terminado.css">
-
-  <style>
-    /* === ESTILOS ADAPTADOS PARA CONTROL DE TIEMPO === */
-    .time-cell {
-      text-align: center;
-      min-width: 150px;
-    }
-    .time-display {
-      font-weight: bold;
-      margin-bottom: 5px;
-      color: #333;
-    }
-    .time-btns {
-      display: flex;
-      justify-content: center;
-      gap: 4px;
-    }
-    .time-btns button {
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      padding: 4px 6px;
-      font-size: 13px;
-      transition: 0.2s;
-    }
-    .btn-start { background: #009900; color: #fff; }
-    .btn-start:hover { background: #00b300; }
-    .btn-pause { background: #ffbf00; color: #fff; }
-    .btn-pause:hover { background: #ffcc33; }
-    .btn-save { background: #007bff; color: #fff; }
-    .btn-save:hover { background: #3399ff; }
-
-    .progress-bar {
-      height: 4px;
-      width: 100%;
-      background: #eee;
-      border-radius: 3px;
-      margin-top: 5px;
-      overflow: hidden;
-    }
-    .progress-inner {
-      height: 100%;
-      width: 0%;
-      background: #28a745;
-      transition: width 1s linear;
-    }
-  </style>
+  <title>Historial de Tiempos - BlaaFlow</title>
+  <link rel="stylesheet" href="assets/css/layout.css">
+  <link rel="stylesheet" href="assets/css/control-procesos/procesos.css">
+  <link rel="stylesheet" href="assets/css/historial-tiempo.css">
 </head>
+
 <body>
   <!-- NAVBAR -->
   <div class="navbar">
-    <img src="../assets/img/logo-sin-fondo.png" alt="Logo BlaaFlow">
+    <img src="./assets/img/logo-sin-fondo.png" alt="Logo BlaaFlow">
     <div class="search-profile">
       <input type="text" placeholder="Buscar...">
       <div class="profile">A</div>
@@ -67,46 +21,44 @@
     <!-- SIDEBAR -->
   <div class="sidebar">
     <ul>
-      <li><a href="../dashboard.html">Dashboard Admin</a></li>
+      <li><a href="./dashboard.html">Dashboard Admin</a></li>
 
       <div class="section-title"><b>Fases Especializadas ▿</b></div>
-      <li><a href="../empaste/empaste.html">Encuadernación / Empaste</a></li>
-      <li><a href="../catalogacion/catalogacion.html">Catalogaciones</a></li>
-      <li><a href="../entrega/entrega.html">Entrega Final</a></li>
-      <li><a href="../digitalizacion/digitalizacion.html">Digitalización</a></li>
-      <li><a href="../calidad/calidad.html">Control de Calidad</a></li>
-      <li class="active"><a href="../terminado/terminado.html">Terminado Final</a></li>
-      <li><a href="../alistamiento/alistamiento.html">Alistamiento</a></li>
+      <li><a href="./empaste/empaste.html">Encuadernación / Empaste</a></li>
+      <li><a href="./catalogacion/catalogacion.html">Catalogaciones</a></li>
+      <li ><a href="./entrega/entrega.html">Entrega Final</a></li>
+      <li><a href="./digitalizacion/digitalizacion.html">Digitalización</a></li>
+      <li><a href="./calidad/calidad.html">Control de Calidad</a></li>
+      <li><a href="./terminado/terminado.html">Terminado Final</a></li>
+      <li><a href="./alistamiento/alistamiento.html">Alistamiento</a></li>
 
       <div class="section-title"><b>Seguimiento ▿</b></div>
-      <li><a href="../control-procesos/procesos.html">Control de Procesos</a></li>
-      <li><a href="../historial-procesos/historial-proceso.html">Historial de Procesos</a></li>
-      <li><a href="../historial-tiempo.html">Historial de Tiempos</a></li>
+      <li><a href="./control-procesos/procesos.html">Control de Procesos</a></li>
+      <li><a href="./historial-procesos/historial-proceso.html">Historial de Procesos</a></li>
+      <li class="active"><a href="./historial-tiempo.html">Historial de Tiempos</a></li>
       
       <div class="section-title"><b>Configuración ▿</b></div>
-      <li><a href="../configuracion/permisos.html">Permisos</a></li>
-      <li><a href="../configuracion/fases.html">Fases del Proceso</a></li>
-      <li><a href="../configuracion/roles.html">Roles y Permisos</a></li>
-      <li><a href="../configuracion/usuarios.html">Usuarios</a></li>
+      <li><a href="./configuracion/permisos.html">Permisos</a></li>
+      <li><a href="./configuracion/fases.html">Fases del Proceso</a></li>
+      <li><a href="./configuracion/roles.html">Roles y Permisos</a></li>
+      <li><a href="./configuracion/usuarios.html">Usuarios</a></li>
 
       <div class="section-title"><b>Gestión ▿</b></div>
-      <li><a href="../gestion/proveedores.html">Proveedores</a></li>
+      <li><a href="./gestion/proveedores.html">Proveedores</a></li>
     </ul>
   </div>
 
   <!-- CONTENIDO -->
   <div class="content">
     <div class="header">
-      <h2>📑 Terminado Final</h2>
+      <h2>📚 Historial de Tiempos</h2>
     </div>
-
-    <!-- Contenedor dinámico -->
-    <div id="ordenes-container"></div>
+    <div id="historial-container"></div>
   </div>
 
   <!-- Scripts -->
   <script src="../assets/js/flujo.js"></script>
-  <script src="../assets/js/time-tracking.js"></script>
+  <script src="../assets/js/time-tracking.js?v=1"></script>
 
   <script>
 document.addEventListener("DOMContentLoaded", () => {
@@ -122,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const ordenId = `orden-hist-${idx}`;
     const procesos = registro.procesos || [];
 
-    // Calcular tiempo total global de la orden
+    // Calcular tiempo total de la orden
     let totalSegundos = 0;
     procesos.forEach(p => {
       const tracking = JSON.parse(localStorage.getItem("timeTracking")) || {};
@@ -131,6 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     const totalDisplay = formatTime(totalSegundos);
 
+    // Crear bloque de la orden
     const block = document.createElement("div");
     block.classList.add("order-block");
     block.innerHTML = `
@@ -157,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
               ${procesos.map((p, i) => {
                 const tracking = JSON.parse(localStorage.getItem("timeTracking")) || {};
                 const entry = tracking[p.id];
-                const tiempoTotal = entry ? formatTime(entry.totalSegundos) : "—";
+                const tiempo = entry ? formatTime(entry.totalSegundos) : "—";
                 const sesiones = entry?.sesiones?.length || 0;
                 const fases = entry?.fases || {};
 
@@ -165,10 +118,13 @@ document.addEventListener("DOMContentLoaded", () => {
                   <tr>
                     <td>${p.titulo || "—"}</td>
                     <td>${p.fase || p.estado || "—"}</td>
-                    <td class="time-cell">${tiempoTotal}</td>
+                    <td class="time-cell">${tiempo}</td>
                     <td class="time-detail">${sesiones} sesiones</td>
-                    <td><button class="btn small" onclick="toggleFases('${ordenId}-${i}')">Ver detalle</button></td>
-                  </tr>
+                    <td>
+                      <button class="btn small" onclick="toggleFases('${ordenId}-${i}', this)">
+                        <span class="icon">▶</span> Ver detalle
+                      </button>
+                    </td>
                   <tr id="${ordenId}-${i}" class="fase-detalle hidden">
                     <td colspan="5">
                       <table class="subtable">
@@ -207,9 +163,27 @@ function toggleOrder(id) {
   if (el) el.classList.toggle("hidden");
 }
 
-function toggleFases(id) {
+function toggleFases(id, btn) {
   const el = document.getElementById(id);
-  if (el) el.classList.toggle("hidden");
+  if (!el || !btn) return;
+
+  // Alternar visibilidad del detalle
+  el.classList.toggle("hidden");
+
+  // Alternar clase activa en el botón
+  btn.classList.toggle("active");
+
+  // Cambiar texto e ícono dinámicamente
+  const icon = btn.querySelector(".icon");
+  const text = btn.childNodes[btn.childNodes.length - 1];
+
+  if (btn.classList.contains("active")) {
+    if (icon) icon.textContent = "▼";
+    if (text) btn.innerHTML = '<span class="icon">▼</span> Ocultar detalle';
+  } else {
+    if (icon) icon.textContent = "▶";
+    if (text) btn.innerHTML = '<span class="icon">▶</span> Ver detalle';
+  }
 }
 
 function formatTime(sec) {
@@ -219,5 +193,6 @@ function formatTime(sec) {
   return `${h}h ${m}m ${s}s`;
 }
 </script>
+
 </body>
 </html>
